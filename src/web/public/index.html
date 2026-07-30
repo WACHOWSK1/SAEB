@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAEB 2023 · Painel de Descritores (9º Ano EF)</title>
+    
+    <!-- Tailwind CSS v3 via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#0a3641'
+                        },
+                        critico: '#e63946',
+                        inter: '#f4a261',
+                        adequado: '#2a9d8f'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js v4 & Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    
+    <style>
+        /* Custom scrollbars */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-full text-slate-800 antialiased font-sans flex flex-col">
+
+    <!-- Header Banner (Gradient Turquoise) -->
+    <header class="bg-gradient-to-r from-brand-950 via-brand-900 to-brand-700 text-white shadow-lg border-b border-brand-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <span class="p-2 bg-teal-500/20 backdrop-blur-md rounded-xl text-2xl border border-teal-400/30">📊</span>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                            Painel de Descritores SAEB 2023
+                        </h1>
+                    </div>
+                    <p class="mt-1 text-sm text-teal-200 font-medium">
+                        9º Ano do Ensino Fundamental · Língua Portuguesa e Matemática (Microdados INEP/MEC)
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 bg-brand-900/60 backdrop-blur-md px-4 py-2 rounded-xl border border-teal-500/20 text-xs text-teal-100">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>API Python + Tailwind CSS v3</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filters Bar (Tailwind Bar) -->
+    <section class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm backdrop-blur-md bg-white/95">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 items-center">
+                <!-- Disciplina Filter -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Componente Curricular</label>
+                    <select id="filter-disc" onchange="loadAllData()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 p-2 font-medium">
+                        <option value="Todos">Todos (LP + MT)</option>
+                        <option value="Língua Portuguesa">Língua Portuguesa</option>
+                        <option value="Matemática">Matemática</option>
+                    </select>
+                </div>
+
+                <!-- UF Filter -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Estado (UF)</label>
+                    <select id="filter-uf" onchange="loadAllData()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 p-2 font-medium">
+                        <option value="Brasil (Todos)">Brasil (Todos)</option>
+                    </select>
+                </div>
+
+                <!-- Rede Filter -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Rede de Ensino</label>
+                    <select id="filter-rede" onchange="loadAllData()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 p-2 font-medium">
+                        <option value="Todas">Todas</option>
+                        <option value="Pública">Pública</option>
+                        <option value="Privada">Privada</option>
+                    </select>
+                </div>
+
+                <!-- Métrica Toggle -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Métrica de Acerto</label>
+                    <div class="flex rounded-lg shadow-sm">
+                        <button id="btn-metrica-pond" onclick="setMetrica('ponderado')" class="flex-1 px-3 py-2 text-xs font-bold rounded-l-lg border border-slate-300 bg-brand-700 text-white transition">
+                            Ponderada
+                        </button>
+                        <button id="btn-metrica-simp" onclick="setMetrica('simples')" class="flex-1 px-3 py-2 text-xs font-bold rounded-r-lg border border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                            Simples
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- KPI Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <!-- KPI 1 -->
+            <div class="bg-white rounded-xl p-4 border border-slate-200 border-t-4 border-t-brand-500 shadow-sm hover:shadow-md transition">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Média Geral de Acerto</p>
+                <h3 id="kpi-media" class="text-2xl font-extrabold text-brand-950 mt-1">--%</h3>
+                <p id="kpi-desc-count" class="text-xs text-slate-500 mt-1">-- descritores avaliados</p>
+            </div>
+
+            <!-- KPI 2 -->
+            <div class="bg-white rounded-xl p-4 border border-slate-200 border-t-4 border-t-emerald-500 shadow-sm hover:shadow-md transition">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Maior Taxa (Ponto Forte)</p>
+                <h3 id="kpi-top-val" class="text-2xl font-extrabold text-emerald-600 mt-1">--%</h3>
+                <p id="kpi-top-label" class="text-xs text-slate-600 font-semibold truncate mt-1">--</p>
+            </div>
+
+            <!-- KPI 3 -->
+            <div class="bg-white rounded-xl p-4 border border-slate-200 border-t-4 border-t-rose-500 shadow-sm hover:shadow-md transition">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Menor Taxa (Ponto Crítico)</p>
+                <h3 id="kpi-worst-val" class="text-2xl font-extrabold text-rose-600 mt-1">--%</h3>
+                <p id="kpi-worst-label" class="text-xs text-slate-600 font-semibold truncate mt-1">--</p>
+            </div>
+
+            <!-- KPI 4 -->
+            <div class="bg-white rounded-xl p-4 border border-slate-200 border-t-4 border-t-rose-500 shadow-sm hover:shadow-md transition">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Descritores Críticos (&lt; 40%)</p>
+                <h3 id="kpi-criticos" class="text-2xl font-extrabold text-rose-600 mt-1">--</h3>
+                <p id="kpi-criticos-sub" class="text-xs text-slate-500 mt-1">--% das habilidades</p>
+            </div>
+
+            <!-- KPI 5 -->
+            <div class="bg-white rounded-xl p-4 border border-slate-200 border-t-4 border-t-cyan-500 shadow-sm hover:shadow-md transition">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total de Respostas</p>
+                <h3 id="kpi-respostas" class="text-2xl font-extrabold text-slate-800 mt-1">--</h3>
+                <p class="text-xs text-slate-500 mt-1">respostas processadas</p>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="border-b border-slate-200 bg-slate-50/50 px-4">
+                <nav class="-mb-px flex space-x-6 overflow-x-auto text-sm font-bold" aria-label="Tabs">
+                    <button onclick="switchTab('tab-ranking')" id="btn-tab-ranking" class="tab-btn border-brand-600 text-brand-700 whitespace-nowrap py-3 px-1 border-b-2 font-bold transition">
+                        📊 Ranking por Descritor
+                    </button>
+                    <button onclick="switchTab('tab-equidade')" id="btn-tab-equidade" class="tab-btn border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap py-3 px-1 border-b-2 font-bold transition">
+                        ⚖️ Equidade: Pública vs Privada
+                    </button>
+                    <button onclick="switchTab('tab-distribuicao')" id="btn-tab-distribuicao" class="tab-btn border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap py-3 px-1 border-b-2 font-bold transition">
+                        ⭕ Distribuição por Faixas
+                    </button>
+                    <button onclick="switchTab('tab-uf')" id="btn-tab-uf" class="tab-btn border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap py-3 px-1 border-b-2 font-bold transition">
+                        🗺️ Desempenho por Estado (UF)
+                    </button>
+                    <button onclick="switchTab('tab-guia')" id="btn-tab-guia" class="tab-btn border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap py-3 px-1 border-b-2 font-bold transition">
+                        📖 Guia & Tabela Interativa
+                    </button>
+                </nav>
+            </div>
+
+            <div class="p-6">
+                <!-- TAB 1: RANKING POR DESCRITOR -->
+                <div id="tab-ranking" class="tab-content space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <h2 class="text-lg font-extrabold text-slate-900">Ranking de Desempenho por Descritor / Habilidade</h2>
+                            <p class="text-xs text-slate-500">Ordenado da maior para a menor taxa de acerto. A cor indica a faixa de aprendizagem.</p>
+                        </div>
+                        <!-- Band Legend Strip -->
+                        <div class="flex items-center gap-3 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold">
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-rose-500"></span> Crítico (&lt;40%)</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-amber-500"></span> Intermediário (40-70%)</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Adequado (&gt;70%)</span>
+                        </div>
+                    </div>
+
+                    <!-- Chart Container with Dynamic Height -->
+                    <div id="ranking-chart-container" class="relative w-full bg-white rounded-lg p-2" style="min-height: 600px;">
+                        <canvas id="chart-ranking"></canvas>
+                    </div>
+                </div>
+
+                <!-- TAB 2: EQUIDADE PUBLICA VS PRIVADA -->
+                <div id="tab-equidade" class="tab-content hidden space-y-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-900">Equidade Educacional: Rede Pública vs Rede Privada</h2>
+                        <p class="text-xs text-slate-500">Gráfico de divergência indicando a vantagem da Rede Privada sobre a Pública (em Pontos Percentuais).</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                        <div class="lg:col-span-3 bg-white rounded-lg p-2" style="min-height: 500px;">
+                            <canvas id="chart-equidade"></canvas>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-teal-50 border border-teal-200 rounded-xl p-4 space-y-3">
+                                <h3 class="text-sm font-extrabold text-teal-900 uppercase tracking-wider">Desigualdade Média (Gap)</h3>
+                                <p id="eq-avg-gap" class="text-3xl font-extrabold text-teal-700">-- pp</p>
+                                <hr class="border-teal-200">
+                                <div>
+                                    <p class="text-xs font-bold text-teal-900 uppercase">Maior Disparidade</p>
+                                    <p id="eq-top-code" class="text-sm font-extrabold text-slate-900 mt-0.5">--</p>
+                                    <p id="eq-top-gap" class="text-xs text-teal-700 font-semibold">-- pp</p>
+                                </div>
+                                <hr class="border-teal-200">
+                                <div>
+                                    <p class="text-xs font-bold text-teal-900 uppercase">Menor Disparidade</p>
+                                    <p id="eq-min-code" class="text-sm font-extrabold text-slate-900 mt-0.5">--</p>
+                                    <p id="eq-min-gap" class="text-xs text-teal-700 font-semibold">-- pp</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: DISTRIBUIÇÃO POR FAIXAS -->
+                <div id="tab-distribuicao" class="tab-content hidden space-y-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-900">Distribuição das Habilidades por Faixa de Aprendizagem</h2>
+                        <p class="text-xs text-slate-500">Proporção de habilidades classificadas nos níveis Crítico, Intermediário e Adequado.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col items-center">
+                            <h3 class="text-sm font-extrabold text-slate-700 mb-4">Geral (Todas as Habilidades)</h3>
+                            <div class="w-72 h-72">
+                                <canvas id="chart-donut"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col items-center">
+                            <h3 class="text-sm font-extrabold text-slate-700 mb-4">Comparativo por Componente Curricular</h3>
+                            <div class="w-full h-72">
+                                <canvas id="chart-comp-bar"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: DESEMPENHO POR UF -->
+                <div id="tab-uf" class="tab-content hidden space-y-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-900">Desempenho Médio por Unidade da Federação (UF)</h2>
+                        <p class="text-xs text-slate-500">Taxa de acerto agregada por estado nos descritores do 9º Ano EF.</p>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-2" style="min-height: 420px;">
+                        <canvas id="chart-uf"></canvas>
+                    </div>
+                </div>
+
+                <!-- TAB 5: GUIA & TABELA INTERATIVA -->
+                <div id="tab-guia" class="tab-content hidden space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-lg font-extrabold text-slate-900">Guia de Descritores & Tabela Interativa</h2>
+                            <p class="text-xs text-slate-500">Busca em tempo real e exportação dos microdados agregados em CSV.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <input type="text" id="search-input" oninput="debounceSearch()" placeholder="🔍 Buscar por código, habilidade, UF..." class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 p-2.5 w-64">
+                            <a href="/api/export" id="btn-export-csv" class="inline-flex items-center gap-2 bg-brand-700 hover:bg-brand-800 text-white font-bold text-xs px-4 py-2.5 rounded-lg transition shadow-sm">
+                                📥 Baixar CSV
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
+                        <table class="w-full text-left text-xs text-slate-700">
+                            <thead class="bg-slate-100 text-slate-700 uppercase font-bold text-[11px] tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Disciplina</th>
+                                    <th class="px-4 py-3">Código</th>
+                                    <th class="px-4 py-3">Descrição da Habilidade (Matriz SAEB)</th>
+                                    <th class="px-4 py-3">Estado (UF)</th>
+                                    <th class="px-4 py-3">Rede</th>
+                                    <th class="px-4 py-3 text-right">Respostas</th>
+                                    <th class="px-4 py-3 text-right">Acertos</th>
+                                    <th class="px-4 py-3 text-right">% Simples</th>
+                                    <th class="px-4 py-3 text-right">% Ponderado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body" class="divide-y divide-slate-200 bg-white font-medium">
+                                <tr>
+                                    <td colspan="9" class="px-4 py-8 text-center text-slate-400">Carregando dados...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-auto py-4 text-center text-xs text-slate-400">
+        Dashboard SAEB 2023 · 9º Ano EF · Desenvolvido com HTML5, Tailwind CSS v3, Chart.js v4 & Python FastAPI
+    </footer>
+
+    <!-- App JavaScript Logic -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
