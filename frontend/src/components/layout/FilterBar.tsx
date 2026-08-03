@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Select, Radio, Card, Form, Tooltip } from 'antd';
-import { FilterOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Select, Radio, Card, Form, Tooltip, Popover } from 'antd';
+import { FilterOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { SaebFilterState, ComponenteCurricular, RedeEnsino, MetricaAcerto } from '../../types/saeb';
 
 interface FilterBarProps {
@@ -16,6 +16,26 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onFilterChange,
   ufsList,
 }) => {
+  const metricHelpContent = (
+    <div className="max-w-xs text-xs space-y-2 leading-relaxed text-[#202124]">
+      <p className="font-bold border-b pb-1 text-sm text-[#202124]">
+        Diferença entre Métricas de Cálculo
+      </p>
+      <div>
+        <span className="font-extrabold text-[#D9AD00] block mb-0.5">
+          • Ponderada (Peso INEP):
+        </span>
+        Utiliza o peso amostral (<code>PESO_ALUNO</code>) fornecido pelo INEP para a expansão populacional. Garante que os resultados reflitam a representatividade estatística real da população total de estudantes do 9º ano EF do Brasil.
+      </div>
+      <div>
+        <span className="font-extrabold text-[#5F6368] block mb-0.5">
+          • Simples (Direta):
+        </span>
+        Média aritmética direta do banco de dados (cada estudante/resposta possui peso igual a 1). Indicada para análise puramente descritiva da amostra observada.
+      </div>
+    </div>
+  );
+
   return (
     <Card className="bg-white border-[#E4E4E4] shadow-2xs rounded-xl mb-6 py-1">
       <div className="flex items-center gap-2 mb-3 pb-2 border-b border-[#E4E4E4]">
@@ -77,12 +97,16 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           />
         </div>
 
-
         {/* Métrica */}
         <div className="lg:col-span-2">
-          <label className="block text-[11px] font-bold text-[#5F6368] uppercase tracking-wider mb-1">
-            Métrica de Cálculo
-          </label>
+          <div className="flex items-center gap-1.5 mb-1">
+            <label className="block text-[11px] font-bold text-[#5F6368] uppercase tracking-wider m-0">
+              Métrica de Cálculo
+            </label>
+            <Popover content={metricHelpContent} trigger="hover" placement="bottomLeft">
+              <QuestionCircleOutlined className="text-[#5F6368] text-xs hover:text-[#202124] cursor-pointer" />
+            </Popover>
+          </div>
           <Radio.Group
             value={filters.metrica}
             onChange={(e) => onFilterChange({ metrica: e.target.value as MetricaAcerto })}

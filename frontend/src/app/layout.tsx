@@ -18,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={inter.variable}>
-      <body className="bg-[#F5F5F5] font-sans antialiased text-[#202124] min-h-screen">
+    <html lang="pt-BR" className={inter.variable} suppressHydrationWarning>
+      <body className="bg-[#F5F5F5] font-sans antialiased text-[#202124] min-h-screen" suppressHydrationWarning>
         <ConfigProvider theme={institutionalTheme} locale={ptBR}>
           {children}
         </ConfigProvider>

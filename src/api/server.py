@@ -200,6 +200,8 @@ def get_descritores(
         media_geral = float((fdf["TOTAL_ACERTOS"].sum() * 100.0 / fdf["TOTAL_RESPOSTAS"].sum()).round(1))
 
     total_respostas = int(fdf["TOTAL_RESPOSTAS"].sum())
+    items_per_student = 52 if disc == "Todos" else 26
+    total_estudantes = int(round(total_respostas / items_per_student))
     top = sorted_df.iloc[0].to_dict()
     worst = sorted_df.iloc[-1].to_dict()
     criticos = int((sorted_df["pct"] < 40.0).sum())
@@ -210,6 +212,7 @@ def get_descritores(
         "kpis": {
             "media_geral": media_geral,
             "total_respostas": total_respostas,
+            "total_estudantes": total_estudantes,
             "total_descritores": len(results),
             "criticos_count": criticos,
             "top_descritor": {"codigo": top["CO_DESCRITOR"], "disc": top["DS_DISCIPLINA"], "pct": top["pct"], "desc": top["descricao"]},

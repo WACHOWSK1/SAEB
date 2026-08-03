@@ -119,10 +119,10 @@ export default function VisaoGeralPage() {
             />
 
             <KpiCard
-              title="Estudantes Analisados"
+              title="Estudantes Avaliados"
               value={(kpiData?.totalEstudantes || 0).toLocaleString('pt-BR')}
-              subtitle="Respostas no recorte selecionado"
-              tooltipText="Total de respostas de estudantes de 9º ano EF consideradas no recorte selecionado."
+              subtitle="Estudantes no recorte selecionado"
+              tooltipText="Número total de estudantes do 9º ano do Ensino Fundamental que participaram da avaliação no recorte selecionado."
               statusBorderColor="#202124"
               accentColor="#202124"
               icon={<UserOutlined />}

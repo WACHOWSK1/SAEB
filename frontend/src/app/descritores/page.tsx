@@ -141,21 +141,21 @@ export default function DescritoresPage() {
                     title="Taxa de Acerto Ponderada"
                     value={currentItem.pct.toFixed(1)}
                     suffix="%"
-                    valueStyle={{ color: perf.color, fontWeight: 900, fontSize: '32px' }}
+                    styles={{ content: { color: perf.color, fontWeight: 900, fontSize: '32px' } }}
                   />
                   <hr className="border-[#E4E4E4]" />
                   <Statistic
                     title="Total de Estudantes (Respostas)"
                     value={currentItem.TOTAL_RESPOSTAS}
                     formatter={(val) => Number(val).toLocaleString('pt-BR')}
-                    valueStyle={{ color: '#202124', fontWeight: 800 }}
+                    styles={{ content: { color: '#202124', fontWeight: 800 } }}
                   />
                   <hr className="border-[#E4E4E4]" />
                   <Statistic
                     title="Total de Acertos Computados"
                     value={currentItem.TOTAL_ACERTOS}
                     formatter={(val) => Number(val).toLocaleString('pt-BR')}
-                    valueStyle={{ color: '#5F6368', fontWeight: 700 }}
+                    styles={{ content: { color: '#5F6368', fontWeight: 700 } }}
                   />
                 </Card>
               </Col>

@@ -172,7 +172,7 @@ export default function TerritorialPage() {
                 title={<span className="text-xs font-bold text-[#5F6368] uppercase">Média Nacional do Brasil (2023)</span>}
                 value={ufData.mediaBr.toFixed(1)}
                 suffix="%"
-                valueStyle={{ color: '#FFCC00', fontWeight: 900, fontSize: '28px' }}
+                styles={{ content: { color: '#FFCC00', fontWeight: 900, fontSize: '28px' } }}
               />
               <p className="text-xs text-[#5F6368] m-0 mt-1">27 Unidades da Federação avaliadas</p>
             </Card>
@@ -182,7 +182,7 @@ export default function TerritorialPage() {
                 title={<span className="text-xs font-bold text-[#5F6368] uppercase">Estado com Maior Acerto</span>}
                 value={topUf.pct.toFixed(1)}
                 suffix="%"
-                valueStyle={{ color: '#388E3C', fontWeight: 900, fontSize: '28px' }}
+                styles={{ content: { color: '#388E3C', fontWeight: 900, fontSize: '28px' } }}
               />
               <p className="text-xs font-bold text-[#202124] m-0 mt-1">{topUf.NM_UF}</p>
             </Card>
@@ -192,7 +192,7 @@ export default function TerritorialPage() {
                 title={<span className="text-xs font-bold text-[#5F6368] uppercase">Estado com Menor Acerto</span>}
                 value={worstUf.pct.toFixed(1)}
                 suffix="%"
-                valueStyle={{ color: '#D32F2F', fontWeight: 900, fontSize: '28px' }}
+                styles={{ content: { color: '#D32F2F', fontWeight: 900, fontSize: '28px' } }}
               />
               <p className="text-xs font-bold text-[#202124] m-0 mt-1">{worstUf.NM_UF}</p>
             </Card>
