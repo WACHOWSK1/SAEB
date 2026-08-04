@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Select, Radio, Card, Form, Tooltip, Popover } from 'antd';
+import { Select, Radio, Card, Tooltip, Popover } from 'antd';
 import { FilterOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { SaebFilterState, ComponenteCurricular, RedeEnsino, MetricaAcerto } from '../../types/saeb';
+import { SaebFilterState, AnoEscolar, ComponenteCurricular, RedeEnsino, MetricaAcerto } from '../../types/saeb';
 
 interface FilterBarProps {
   filters: SaebFilterState;
@@ -25,7 +25,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         <span className="font-extrabold text-[#D9AD00] block mb-0.5">
           • Ponderada (Peso INEP):
         </span>
-        Utiliza o peso amostral (<code>PESO_ALUNO</code>) fornecido pelo INEP para a expansão populacional. Garante que os resultados reflitam a representatividade estatística real da população total de estudantes do 9º ano EF do Brasil.
+        Utiliza o peso amostral (<code>PESO_ALUNO</code>) fornecido pelo INEP para a expansão populacional. Garante que os resultados reflitam a representatividade estatística real da população de estudantes no SAEB 2023.
       </div>
       <div>
         <span className="font-extrabold text-[#5F6368] block mb-0.5">
@@ -41,16 +41,35 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       <div className="flex items-center gap-2 mb-3 pb-2 border-b border-[#E4E4E4]">
         <FilterOutlined className="text-[#FFCC00] text-base" />
         <span className="font-extrabold text-[#202124] text-xs uppercase tracking-wider">
-          Filtros Encadeados de Análise Microdado (SAEB 2023 · 9º Ano EF)
+          Filtros Encadeados de Análise Microdado (SAEB 2023 · {filters.anoEscolar || '9º Ano EF'})
         </span>
-        <Tooltip title="Os filtros funcionam de forma encadeada. Selecionar um Estado limita os municípios disponíveis.">
+        <Tooltip title="Os filtros funcionam de forma encadeada. Selecionar um Ano/Série limita os descritores e métricas ao recorte escolhido.">
           <InfoCircleOutlined className="text-gray-400 text-xs hover:text-black cursor-pointer" />
         </Tooltip>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        {/* Ano / Série */}
+        <div className="lg:col-span-1">
+          <label className="block text-[11px] font-bold text-[#5F6368] uppercase tracking-wider mb-1">
+            Ano / Série
+          </label>
+          <Select
+            value={filters.anoEscolar || '9º Ano EF'}
+            onChange={(val: AnoEscolar) => onFilterChange({ anoEscolar: val })}
+            className="w-full text-xs font-semibold"
+            options={[
+              { value: '2º Ano EF', label: '2º Ano EF' },
+              { value: '5º Ano EF', label: '5º Ano EF' },
+              { value: '9º Ano EF', label: '9º Ano EF' },
+              { value: '3ª/4ª Série EM', label: '3ª Série EM' },
+              { value: 'Todos', label: 'Todos os Anos' },
+            ]}
+          />
+        </div>
+
         {/* Componente Curricular */}
-        <div>
+        <div className="lg:col-span-1">
           <label className="block text-[11px] font-bold text-[#5F6368] uppercase tracking-wider mb-1">
             Componente
           </label>
@@ -67,7 +86,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         </div>
 
         {/* Estado (UF) */}
-        <div>
+        <div className="lg:col-span-1">
           <label className="block text-[11px] font-bold text-[#5F6368] uppercase tracking-wider mb-1">
             Estado (UF)
           </label>
@@ -81,7 +100,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         </div>
 
         {/* Rede de Ensino */}
-        <div>
+        <div className="lg:col-span-1">
           <label className="block text-[11px] font-bold text-[#5F6368] uppercase tracking-wider mb-1">
             Rede de Ensino
           </label>

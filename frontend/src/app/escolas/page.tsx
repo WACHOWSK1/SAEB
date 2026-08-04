@@ -11,6 +11,7 @@ const { Content } = Layout;
 export default function EscolasPage() {
   const [collapsed, setCollapsed] = useState(false);
   const [filters, setFilters] = useState<SaebFilterState>({
+    anoEscolar: '9º Ano EF',
     componente: 'Todos',
     uf: 'Brasil (Todos)',
     municipio: 'Todos',
@@ -29,7 +30,7 @@ export default function EscolasPage() {
           title="Análise no Nível de Escolas"
           filters={filters}
           onFilterChange={(u) => setFilters((p) => ({ ...p, ...u }))}
-          onResetFilters={() => setFilters({ componente: 'Todos', uf: 'Brasil (Todos)', municipio: 'Todos', escola: 'Todas', rede: 'Todas', localizacao: 'Todas', metrica: 'ponderado', search: '' })}
+          onResetFilters={() => setFilters({ anoEscolar: '9º Ano EF', componente: 'Todos', uf: 'Brasil (Todos)', municipio: 'Todos', escola: 'Todas', rede: 'Todas', localizacao: 'Todas', metrica: 'ponderado', search: '' })}
           onExport={() => alert('Exportando escolas...')}
         />
         <Content className="p-6 space-y-6 max-w-7xl mx-auto w-full">

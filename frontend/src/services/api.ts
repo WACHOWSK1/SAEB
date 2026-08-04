@@ -20,6 +20,7 @@ export async function fetchSaebDescritores(
 ): Promise<{ kpis: SaebKpiData; descritores: DescritorItem[] }> {
   try {
     const params = new URLSearchParams({
+      ano: filters.anoEscolar || '9º Ano EF',
       disc: filters.componente,
       uf: filters.uf,
       rede: filters.rede,
@@ -80,7 +81,7 @@ export async function fetchSaebDescritores(
       return { kpis, descritores };
     }
   } catch (err) {
-    console.warn('API fetch error, falling back to full SAEB 2023 9EF dataset:', err);
+    console.warn('API fetch error, falling back to full SAEB 2023 dataset:', err);
   }
 
   return getFallbackDescritores(filters, thresholds);
@@ -89,6 +90,7 @@ export async function fetchSaebDescritores(
 export async function fetchSaebEquidade(filters: SaebFilterState): Promise<{ avgGap: number; items: EquityGapItem[] }> {
   try {
     const params = new URLSearchParams({
+      ano: filters.anoEscolar || '9º Ano EF',
       disc: filters.componente,
       uf: filters.uf,
       metrica: filters.metrica
@@ -117,6 +119,7 @@ export async function fetchSaebEquidade(filters: SaebFilterState): Promise<{ avg
 export async function fetchSaebUfs(filters: SaebFilterState): Promise<{ mediaBr: number; ufs: UfPerformanceItem[] }> {
   try {
     const params = new URLSearchParams({
+      ano: filters.anoEscolar || '9º Ano EF',
       disc: filters.componente,
       rede: filters.rede,
       metrica: filters.metrica

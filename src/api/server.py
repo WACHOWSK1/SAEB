@@ -95,12 +95,10 @@ if not os.path.exists(DATA_PATH):
     raise FileNotFoundError(f"Parquet data file not found at {DATA_PATH}")
 
 df_raw = pd.read_parquet(DATA_PATH)
-# Scope: 9º Ano EF, LP & MT
-df_9ef = df_raw[(df_raw["ANO_ESCOLAR"] == "9º Ano EF") & (df_raw["DS_DISCIPLINA"].isin(["Língua Portuguesa", "Matemática"]))].copy()
 
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="SAEB 2023 9EF API", version="2.0")
+app = FastAPI(title="SAEB 2023 Multi-Ano API", version="2.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -115,9 +113,13 @@ WEB_DIR = os.path.join(BASE_DIR, "src", "web", "public")
 os.makedirs(WEB_DIR, exist_ok=True)
 app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
 
-def filter_dataset(disc="Todos", uf="Brasil (Todos)", rede="Todas"):
-    fdf = df_9ef.copy()
-    if disc != "Todos":
+def filter_dataset(ano="9º Ano EF", disc="Todos", uf="Brasil (Todos)", rede="Todas"):
+    fdf = df_raw.copy()
+    if ano != "Todos":
+        fdf = fdf[fdf["ANO_ESCOLAR"] == ano]
+    if disc == "Todos":
+        fdf = fdf[fdf["DS_DISCIPLINA"].isin(["Língua Portuguesa", "Matemática"])]
+    elif disc != "Todas as Disciplinas":
         fdf = fdf[fdf["DS_DISCIPLINA"] == disc]
     if uf != "Brasil (Todos)":
         fdf = fdf[fdf["NM_UF"] == uf]
@@ -135,10 +137,12 @@ def read_root():
 
 @app.get("/api/meta")
 def get_metadata():
-    ufs = sorted(df_9ef["NM_UF"].unique().tolist())
-    disciplinas = ["Língua Portuguesa", "Matemática"]
+    anos = sorted(df_raw["ANO_ESCOLAR"].unique().tolist())
+    ufs = sorted(df_raw["NM_UF"].unique().tolist())
+    disciplinas = ["Língua Portuguesa", "Matemática", "Ciências Humanas", "Ciências da Natureza"]
     redes = ["Todas", "Pública", "Privada"]
     return {
+        "anos": ["Todos"] + anos,
         "ufs": ["Brasil (Todos)"] + ufs,
         "disciplinas": ["Todos"] + disciplinas,
         "redes": redes
@@ -146,12 +150,13 @@ def get_metadata():
 
 @app.get("/api/descritores")
 def get_descritores(
+    ano: str = Query("9º Ano EF"),
     disc: str = Query("Todos"),
     uf: str = Query("Brasil (Todos)"),
     rede: str = Query("Todas"),
     metrica: str = Query("ponderado")
 ):
-    fdf = filter_dataset(disc, uf, rede)
+    fdf = filter_dataset(ano, disc, uf, rede)
     if fdf.empty:
         return {"kpis": {}, "descritores": []}
 
@@ -223,16 +228,13 @@ def get_descritores(
 
 @app.get("/api/equidade")
 def get_equidade(
+    ano: str = Query("9º Ano EF"),
     disc: str = Query("Todos"),
     uf: str = Query("Brasil (Todos)"),
     metrica: str = Query("ponderado")
 ):
     # Compares Public vs Private
-    fdf = df_9ef.copy()
-    if disc != "Todos":
-        fdf = fdf[fdf["DS_DISCIPLINA"] == disc]
-    if uf != "Brasil (Todos)":
-        fdf = fdf[fdf["NM_UF"] == uf]
+    fdf = filter_dataset(ano, disc, uf, rede="Todas")
 
     has_peso = "PESO_TOTAL_RESPOSTAS" in fdf.columns
     agg_dict = {"TOTAL_RESPOSTAS": ("TOTAL_RESPOSTAS", "sum"), "TOTAL_ACERTOS": ("TOTAL_ACERTOS", "sum")}
@@ -269,15 +271,12 @@ def get_equidade(
 
 @app.get("/api/ufs")
 def get_ufs(
+    ano: str = Query("9º Ano EF"),
     disc: str = Query("Todos"),
     rede: str = Query("Todas"),
     metrica: str = Query("ponderado")
 ):
-    fdf = df_9ef.copy()
-    if disc != "Todos":
-        fdf = fdf[fdf["DS_DISCIPLINA"] == disc]
-    if rede != "Todas":
-        fdf = fdf[fdf["TP_REDE"] == rede]
+    fdf = filter_dataset(ano, disc, uf="Brasil (Todos)", rede=rede)
 
     has_peso = "PESO_TOTAL_RESPOSTAS" in fdf.columns
     agg_dict = {"TOTAL_RESPOSTAS": ("TOTAL_RESPOSTAS", "sum"), "TOTAL_ACERTOS": ("TOTAL_ACERTOS", "sum")}
@@ -289,10 +288,10 @@ def get_ufs(
     
     if metrica == "ponderado" and has_peso:
         uf_agg["pct"] = (uf_agg["PESO_TOTAL_ACERTOS"] * 100.0 / uf_agg["PESO_TOTAL_RESPOSTAS"]).round(1)
-        media_br = float((fdf["PESO_TOTAL_ACERTOS"].sum() * 100.0 / fdf["PESO_TOTAL_RESPOSTAS"].sum()).round(1))
+        media_br = float((fdf["PESO_TOTAL_ACERTOS"].sum() * 100.0 / fdf["PESO_TOTAL_RESPOSTAS"].sum()).round(1)) if not fdf.empty else 0.0
     else:
         uf_agg["pct"] = (uf_agg["TOTAL_ACERTOS"] * 100.0 / uf_agg["TOTAL_RESPOSTAS"]).round(1)
-        media_br = float((fdf["TOTAL_ACERTOS"].sum() * 100.0 / fdf["TOTAL_RESPOSTAS"].sum()).round(1))
+        media_br = float((fdf["TOTAL_ACERTOS"].sum() * 100.0 / fdf["TOTAL_RESPOSTAS"].sum()).round(1)) if not fdf.empty else 0.0
 
     sorted_uf = uf_agg.sort_values("pct", ascending=False).to_dict(orient="records")
 
@@ -304,11 +303,12 @@ def get_ufs(
 @app.get("/api/tabela")
 def get_tabela(
     search: str = Query(""),
+    ano: str = Query("9º Ano EF"),
     disc: str = Query("Todos"),
     uf: str = Query("Brasil (Todos)"),
     rede: str = Query("Todas")
 ):
-    fdf = filter_dataset(disc, uf, rede)
+    fdf = filter_dataset(ano, disc, uf, rede)
     if search:
         mask = (
             fdf["CO_DESCRITOR"].str.contains(search, case=False, na=False) |
@@ -319,17 +319,18 @@ def get_tabela(
 
     fdf["DS_HABILIDADE"] = fdf.apply(lambda r: get_desc_text(r["CO_DESCRITOR"], r["DS_DISCIPLINA"]), axis=1)
     
-    cols = ["DS_DISCIPLINA", "CO_DESCRITOR", "DS_HABILIDADE", "NM_UF", "TP_REDE", "TOTAL_RESPOSTAS", "TOTAL_ACERTOS", "PCT_ACERTO", "PCT_ACERTO_PONDERADO"]
+    cols = ["ANO_ESCOLAR", "DS_DISCIPLINA", "CO_DESCRITOR", "DS_HABILIDADE", "NM_UF", "TP_REDE", "TOTAL_RESPOSTAS", "TOTAL_ACERTOS", "PCT_ACERTO", "PCT_ACERTO_PONDERADO"]
     res = fdf[[c for c in cols if c in fdf.columns]].head(500).to_dict(orient="records")
     return {"total": len(fdf), "rows": res}
 
 @app.get("/api/export")
 def export_csv(
+    ano: str = Query("9º Ano EF"),
     disc: str = Query("Todos"),
     uf: str = Query("Brasil (Todos)"),
     rede: str = Query("Todas")
 ):
-    fdf = filter_dataset(disc, uf, rede)
+    fdf = filter_dataset(ano, disc, uf, rede)
     fdf["DS_HABILIDADE"] = fdf.apply(lambda r: get_desc_text(r["CO_DESCRITOR"], r["DS_DISCIPLINA"]), axis=1)
     
     cols = ["ANO_ESCOLAR", "DS_DISCIPLINA", "CO_DESCRITOR", "DS_HABILIDADE", "NM_UF", "TP_REDE", "TOTAL_RESPOSTAS", "TOTAL_ACERTOS", "PCT_ACERTO", "PCT_ACERTO_PONDERADO"]
@@ -338,7 +339,7 @@ def export_csv(
     return StreamingResponse(
         iter([csv_str.encode("utf-8-sig")]),
         media_type="text/csv",
-        headers={"Content-Disposition": "attachment; filename=saeb_2023_9ef_descritores.csv"}
+        headers={"Content-Disposition": "attachment; filename=saeb_2023_descritores.csv"}
     )
 
 if __name__ == "__main__":

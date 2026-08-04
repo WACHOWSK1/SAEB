@@ -12,6 +12,7 @@ const { Content } = Layout;
 export default function RelatoriosPage() {
   const [collapsed, setCollapsed] = useState(false);
   const [filters, setFilters] = useState<SaebFilterState>({
+    anoEscolar: '9º Ano EF',
     componente: 'Todos',
     uf: 'Brasil (Todos)',
     municipio: 'Todos',
@@ -30,7 +31,7 @@ export default function RelatoriosPage() {
           title="Central de Relatórios e Exportações"
           filters={filters}
           onFilterChange={(u) => setFilters((p) => ({ ...p, ...u }))}
-          onResetFilters={() => setFilters({ componente: 'Todos', uf: 'Brasil (Todos)', municipio: 'Todos', escola: 'Todas', rede: 'Todas', localizacao: 'Todas', metrica: 'ponderado', search: '' })}
+          onResetFilters={() => setFilters({ anoEscolar: '9º Ano EF', componente: 'Todos', uf: 'Brasil (Todos)', municipio: 'Todos', escola: 'Todas', rede: 'Todas', localizacao: 'Todas', metrica: 'ponderado', search: '' })}
           onExport={() => alert('Exportando relatório geral...')}
         />
 

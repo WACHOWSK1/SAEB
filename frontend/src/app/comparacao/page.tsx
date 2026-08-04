@@ -12,6 +12,7 @@ const { Content } = Layout;
 export default function ComparacaoPage() {
   const [collapsed, setCollapsed] = useState(false);
   const [filters, setFilters] = useState<SaebFilterState>({
+    anoEscolar: '9º Ano EF',
     componente: 'Todos',
     uf: 'Brasil (Todos)',
     municipio: 'Todos',
@@ -83,7 +84,7 @@ export default function ComparacaoPage() {
           title="Comparações Internas (SAEB 2023)"
           filters={filters}
           onFilterChange={(u) => setFilters((p) => ({ ...p, ...u }))}
-          onResetFilters={() => setFilters({ componente: 'Todos', uf: 'Brasil (Todos)', municipio: 'Todos', escola: 'Todas', rede: 'Todas', localizacao: 'Todas', metrica: 'ponderado', search: '' })}
+          onResetFilters={() => setFilters({ anoEscolar: '9º Ano EF', componente: 'Todos', uf: 'Brasil (Todos)', municipio: 'Todos', escola: 'Todas', rede: 'Todas', localizacao: 'Todas', metrica: 'ponderado', search: '' })}
           onExport={() => alert('Exportando comparações...')}
         />
 

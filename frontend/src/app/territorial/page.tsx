@@ -5,6 +5,7 @@ import { Layout, Card, Table, Tag, Statistic } from 'antd';
 import ReactECharts from 'echarts-for-react';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Header } from '../../components/layout/Header';
+import { FilterBar } from '../../components/layout/FilterBar';
 import { SaebFilterState, UfPerformanceItem } from '../../types/saeb';
 import { fetchSaebUfs } from '../../services/api';
 
@@ -13,6 +14,7 @@ const { Content } = Layout;
 export default function TerritorialPage() {
   const [collapsed, setCollapsed] = useState(false);
   const [filters, setFilters] = useState<SaebFilterState>({
+    anoEscolar: '9º Ano EF',
     componente: 'Todos',
     uf: 'Brasil (Todos)',
     municipio: 'Todos',
@@ -24,6 +26,17 @@ export default function TerritorialPage() {
   });
 
   const [ufData, setUfData] = useState<{ mediaBr: number; ufs: UfPerformanceItem[] }>({ mediaBr: 46.8, ufs: [] });
+
+  const ufsList = [
+    'Brasil (Todos)',
+    'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará',
+    'Distrito Federal', 'Espírito Santo', 'Goiás', 'Maranhão',
+    'Mato Grosso', 'Mato Grosso do Sul', 'Minas Gerais', 'Pará',
+    'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
+    'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul',
+    'Rondônia', 'Roraima', 'Santa Catarina', 'São Paulo',
+    'Sergipe', 'Tocantins'
+  ];
 
   useEffect(() => {
     async function load() {
@@ -40,7 +53,7 @@ export default function TerritorialPage() {
   // Apache ECharts State Bar Chart with National Benchmark Line
   const barOption = {
     title: {
-      text: 'Desempenho por Estado (UF) vs Média Nacional 2023 (46.8%)',
+      text: `Desempenho por Estado (UF) vs Média Nacional (${filters.anoEscolar || '9º Ano EF'} · ${ufData.mediaBr.toFixed(1)}%)`,
       textStyle: { fontSize: 13, fontWeight: 'bold', color: '#202124', fontFamily: 'Inter' },
       left: 10,
       top: 5,
@@ -70,8 +83,8 @@ export default function TerritorialPage() {
     },
     yAxis: {
       type: 'value',
-      min: 30,
-      max: 60,
+      min: Math.max(0, Math.floor(Math.min(...sortedUfs.map(u => u.pct), ufData.mediaBr) - 5)),
+      max: Math.min(100, Math.ceil(Math.max(...sortedUfs.map(u => u.pct), ufData.mediaBr) + 5)),
       axisLabel: { formatter: '{value}%', fontFamily: 'Inter', fontSize: 11 },
       splitLine: { lineStyle: { color: '#E4E4E4', type: 'dashed' } }
     },
@@ -122,7 +135,7 @@ export default function TerritorialPage() {
       render: (v: number) => <span className="font-mono font-black text-xs text-[#202124]">{v.toFixed(1)}%</span>
     },
     {
-      title: 'Diferença vs Média Brasil (46.8%)',
+      title: `Diferença vs Média Brasil (${ufData.mediaBr.toFixed(1)}%)`,
       key: 'diff',
       render: (_: any, r: UfPerformanceItem) => {
         const diff = r.pct - ufData.mediaBr;
@@ -161,15 +174,20 @@ export default function TerritorialPage() {
           title="Análise Territorial das Unidades da Federação"
           filters={filters}
           onFilterChange={(u) => setFilters((p) => ({ ...p, ...u }))}
-          onResetFilters={() => setFilters({ componente: 'Todos', uf: 'Brasil (Todos)', municipio: 'Todos', escola: 'Todas', rede: 'Todas', localizacao: 'Todas', metrica: 'ponderado', search: '' })}
+          onResetFilters={() => setFilters({ anoEscolar: '9º Ano EF', componente: 'Todos', uf: 'Brasil (Todos)', municipio: 'Todos', escola: 'Todas', rede: 'Todas', localizacao: 'Todas', metrica: 'ponderado', search: '' })}
         />
 
         <Content className="p-6 space-y-4 max-w-7xl mx-auto w-full">
+          {/* Filter Bar */}
+          <div className="mb-4">
+            <FilterBar filters={filters} onFilterChange={(u) => setFilters((p) => ({ ...p, ...u }))} ufsList={ufsList} />
+          </div>
+
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
               <Statistic
-                title={<span className="text-xs font-bold text-[#5F6368] uppercase">Média Nacional do Brasil (2023)</span>}
+                title={<span className="text-xs font-bold text-[#5F6368] uppercase">Média Nacional - {filters.anoEscolar || '9º Ano EF'}</span>}
                 value={ufData.mediaBr.toFixed(1)}
                 suffix="%"
                 styles={{ content: { color: '#FFCC00', fontWeight: 900, fontSize: '28px' } }}
@@ -204,7 +222,7 @@ export default function TerritorialPage() {
           </Card>
 
           {/* Full State Table */}
-          <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs" title={<span className="font-extrabold text-[#202124]">Ranking Territorial Completo de todas as 27 UFs (SAEB 2023)</span>}>
+          <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs" title={<span className="font-extrabold text-[#202124]">Ranking Territorial Completo de todas as 27 UFs ({filters.anoEscolar || '9º Ano EF'} · SAEB 2023)</span>}>
             <Table
               dataSource={sortedUfs}
               columns={columns}

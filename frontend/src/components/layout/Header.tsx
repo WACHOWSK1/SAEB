@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
               {title}
             </h1>
             <Tag color="#FFCC00" className="text-black font-extrabold px-2.5 py-0.5 rounded-md border-0 text-xs shadow-2xs">
-              SAEB 2023 — 9º ano do Ensino Fundamental
+              SAEB 2023
             </Tag>
           </div>
           <p className="text-xs text-[#5F6368] mt-1 m-0 flex items-center gap-1.5">

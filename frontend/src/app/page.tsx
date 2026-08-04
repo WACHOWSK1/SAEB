@@ -24,6 +24,7 @@ const { Content } = Layout;
 export default function VisaoGeralPage() {
   const [collapsed, setCollapsed] = useState(false);
   const [filters, setFilters] = useState<SaebFilterState>({
+    anoEscolar: '9º Ano EF',
     componente: 'Todos',
     uf: 'Brasil (Todos)',
     municipio: 'Todos',
@@ -66,6 +67,7 @@ export default function VisaoGeralPage() {
 
   const handleResetFilters = () => {
     setFilters({
+      anoEscolar: '9º Ano EF',
       componente: 'Todos',
       uf: 'Brasil (Todos)',
       municipio: 'Todos',

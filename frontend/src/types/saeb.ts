@@ -1,5 +1,6 @@
 // Types for SAEB 2023 9º Ano EF Educational Intelligence Platform
 
+export type AnoEscolar = 'Todos' | '2º Ano EF' | '5º Ano EF' | '9º Ano EF' | '3ª/4ª Série EM';
 export type ComponenteCurricular = 'Todos' | 'Língua Portuguesa' | 'Matemática';
 export type RedeEnsino = 'Todas' | 'Pública' | 'Privada';
 export type Localizacao = 'Todas' | 'Urbana' | 'Rural';
@@ -20,6 +21,7 @@ export const DEFAULT_THRESHOLDS: PerformanceThresholds = {
 };
 
 export interface SaebFilterState {
+  anoEscolar: AnoEscolar;
   componente: ComponenteCurricular;
   uf: string;
   municipio: string;
