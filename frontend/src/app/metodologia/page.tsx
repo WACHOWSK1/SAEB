@@ -69,7 +69,7 @@ export default function MetodologiaPage() {
                 <p className="text-sm font-black text-[#202124] m-0">Horvitz-Thompson / BIB</p>
               </div>
               <div className="p-3 bg-[#FAFAFA] border border-[#E4E4E4] rounded-lg">
-                <span className="text-[11px] font-bold text-[#5F6368] uppercase block mb-0.5">Item-Level Dataset</span>
+                <span className="text-[11px] font-bold text-[#5F6368] uppercase block mb-0.5">Conjunto de Dados por Item</span>
                 <p className="text-sm font-black text-[#202124] m-0">129.443.028 Respostas</p>
               </div>
             </div>
@@ -94,7 +94,7 @@ export default function MetodologiaPage() {
               {/* Section 2 */}
               <div>
                 <h3 className="text-sm font-extrabold text-[#202124] uppercase tracking-wider mb-2 text-[#D9AD00]">
-                  2. Formulation Matemática: Taxa de Acerto por Descritor ($P_d$)
+                  2. Formulação Matemática: Taxa de Acerto por Descritor ($P_d$)
                 </h3>
                 <p className="text-[#5F6368] mb-3">
                   A taxa percentual de domínio em cada descritor $d$ da Matriz de Referência do SAEB é calculada sob duas métricas complementares na plataforma:

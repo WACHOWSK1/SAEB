@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Layout } from 'antd';
+import { Layout, Alert } from 'antd';
 import {
   PercentageOutlined,
   UserOutlined,
@@ -89,6 +89,9 @@ export default function VisaoGeralPage() {
     );
   });
 
+  const hasData = descritores.length > 0 && kpiData !== null;
+  const isEmpty = !loading && (descritores.length === 0 || kpiData === null);
+
   return (
     <Layout className="min-h-screen bg-[#F5F5F5] flex flex-row">
       <Sidebar collapsed={collapsed} onCollapse={setCollapsed} />
@@ -107,94 +110,124 @@ export default function VisaoGeralPage() {
             <FilterBar filters={filters} onFilterChange={handleFilterChange} ufsList={ufsList} />
           </div>
 
-          {/* KPI Cards Grid: 3 in top row, 3 in bottom row with exact same vertical gap (gap-4) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            {/* ROW 1 */}
-            <KpiCard
-              title="Média Geral de Acerto"
-              value={`${kpiData?.mediaGeral.toFixed(1) || '--'}%`}
-              subtitle={`${kpiData?.totalDescritores || 0} habilidades avaliadas`}
-              tooltipText="Percentual médio ponderado de acertos calculado com base nos pesos amostrais dos estudantes do 9º ano EF no SAEB 2023."
-              statusBorderColor="#FFCC00"
-              accentColor="#202124"
-              icon={<PercentageOutlined />}
-            />
+          {/* Indicador de carregamento sutil — barra animada no topo */}
+          {loading && (
+            <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-[#FFCC00] rounded-full" style={{ animation: 'loading-bar 1.2s ease-in-out infinite' }} />
+            </div>
+          )}
+          <style jsx>{`
+            @keyframes loading-bar {
+              0% { width: 10%; margin-left: 0; }
+              50% { width: 60%; margin-left: 20%; }
+              100% { width: 10%; margin-left: 90%; }
+            }
+          `}</style>
 
-            <KpiCard
-              title="Estudantes Avaliados"
-              value={(kpiData?.totalEstudantes || 0).toLocaleString('pt-BR')}
-              subtitle="Estudantes no recorte selecionado"
-              tooltipText="Número total de estudantes do 9º ano do Ensino Fundamental que participaram da avaliação no recorte selecionado."
-              statusBorderColor="#202124"
-              accentColor="#202124"
-              icon={<UserOutlined />}
+          {/* Empty State — quando os filtros não retornam dados */}
+          {isEmpty && (
+            <Alert
+              message="Nenhum dado disponível para o recorte selecionado"
+              description={`Não foram encontrados registros para os filtros: ${filters.anoEscolar} · ${filters.componente} · ${filters.uf} · Rede: ${filters.rede}. Tente ajustar os filtros ou restaurar os valores padrão.`}
+              type="warning"
+              showIcon
+              className="border-yellow-400 bg-amber-50 rounded-xl"
             />
+          )}
 
-            <KpiCard
-              title="Descritores em Nível Crítico"
-              value={`${kpiData?.criticosCount || 0}`}
-              subtitle={`${kpiData?.criticosPct.toFixed(1) || '0'}% do total de habilidades`}
-              tooltipText="Quantidade de descritores com taxa de acerto ponderado inferior a 40%, exigindo intervenção pedagógica prioritária."
-              statusBorderColor="#D32F2F"
-              accentColor="#D32F2F"
-              icon={<WarningOutlined />}
-            />
+          {/* Conteúdo principal — só exibe quando há dados */}
+          {hasData && (
+            <div className={loading ? 'opacity-50 pointer-events-none transition-opacity duration-300' : 'transition-opacity duration-300'}>
+              {/* KPI Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                {/* ROW 1 */}
+                <KpiCard
+                  title="Média Geral de Acerto"
+                  value={`${kpiData.mediaGeral.toFixed(1)}%`}
+                  subtitle={`${kpiData.totalDescritores} habilidades avaliadas`}
+                  tooltipText="Percentual médio ponderado de acertos calculado com base nos pesos amostrais dos estudantes do 9º ano EF no SAEB 2023."
+                  statusBorderColor="#FFCC00"
+                  accentColor="#202124"
+                  icon={<PercentageOutlined />}
+                />
 
-            {/* ROW 2 */}
-            <KpiCard
-              title="UFs Analisadas"
-              value="27"
-              subtitle="Todas as unidades federativas"
-              tooltipText="Total de unidades federativas com registros válidos nos microdados SAEB 2023 para o 9º ano."
-              statusBorderColor="#202124"
-              accentColor="#202124"
-              icon={<GlobalOutlined />}
-            />
+                <KpiCard
+                  title="Estudantes Avaliados"
+                  value={(kpiData.totalEstudantes || 0).toLocaleString('pt-BR')}
+                  subtitle="Estudantes no recorte selecionado"
+                  tooltipText="Número total de estudantes do 9º ano do Ensino Fundamental que participaram da avaliação no recorte selecionado."
+                  statusBorderColor="#202124"
+                  accentColor="#202124"
+                  icon={<UserOutlined />}
+                />
 
-            <KpiCard
-              title="Ponto Forte (Maior Taxa)"
-              value={`${kpiData?.topDescritor.pct.toFixed(1) || '--'}%`}
-              subtitle={`${kpiData?.topDescritor.codigo || '--'} · ${kpiData?.topDescritor.disc || ''}`}
-              tooltipText="Descritor com a maior taxa percentual de acerto entre os estudantes no recorte selecionado."
-              statusBorderColor="#388E3C"
-              accentColor="#388E3C"
-              icon={<TrophyOutlined />}
-            />
+                <KpiCard
+                  title="Descritores em Nível Crítico"
+                  value={`${kpiData.criticosCount}`}
+                  subtitle={`${kpiData.criticosPct.toFixed(1)}% do total de habilidades`}
+                  tooltipText="Quantidade de descritores com taxa de acerto ponderado inferior a 40%, exigindo intervenção pedagógica prioritária."
+                  statusBorderColor="#D32F2F"
+                  accentColor="#D32F2F"
+                  icon={<WarningOutlined />}
+                />
 
-            <KpiCard
-              title="Ponto Crítico (Menor Taxa)"
-              value={`${kpiData?.worstDescritor.pct.toFixed(1) || '--'}%`}
-              subtitle={`${kpiData?.worstDescritor.codigo || '--'} · ${kpiData?.worstDescritor.disc || ''}`}
-              tooltipText="Descritor com a menor taxa de acerto, demandando intervenção pedagógica prioritária."
-              statusBorderColor="#D32F2F"
-              accentColor="#D32F2F"
-              icon={<WarningOutlined />}
-            />
-          </div>
+                {/* ROW 2 */}
+                <KpiCard
+                  title="UFs Analisadas"
+                  value="27"
+                  subtitle="Todas as unidades federativas"
+                  tooltipText="Total de unidades federativas com registros válidos nos microdados SAEB 2023 para o 9º ano."
+                  statusBorderColor="#202124"
+                  accentColor="#202124"
+                  icon={<GlobalOutlined />}
+                />
 
-          {/* Visualizations Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-4">
-            <div className="lg:col-span-2">
-              <DescriptorRankingChart
-                items={filteredDescritores}
-                title="Ranking Completo de Desempenho dos Descritores (SAEB 2023)"
+                <KpiCard
+                  title="Ponto Forte (Maior Taxa)"
+                  value={`${kpiData.topDescritor.pct.toFixed(1)}%`}
+                  subtitle={`${kpiData.topDescritor.codigo} · ${kpiData.topDescritor.disc}`}
+                  tooltipText="Descritor com a maior taxa percentual de acerto entre os estudantes no recorte selecionado."
+                  statusBorderColor="#388E3C"
+                  accentColor="#388E3C"
+                  icon={<TrophyOutlined />}
+                />
+
+                <KpiCard
+                  title="Ponto Crítico (Menor Taxa)"
+                  value={`${kpiData.worstDescritor.pct.toFixed(1)}%`}
+                  subtitle={`${kpiData.worstDescritor.codigo} · ${kpiData.worstDescritor.disc}`}
+                  tooltipText="Descritor com a menor taxa de acerto, demandando intervenção pedagógica prioritária."
+                  statusBorderColor="#D32F2F"
+                  accentColor="#D32F2F"
+                  icon={<WarningOutlined />}
+                />
+              </div>
+
+              {/* Visualizations Row */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-4">
+                <div className="lg:col-span-2">
+                  <DescriptorRankingChart
+                    items={filteredDescritores}
+                    title="Ranking Completo de Desempenho dos Descritores (SAEB 2023)"
+                    thresholds={DEFAULT_THRESHOLDS}
+                  />
+                </div>
+                <div>
+                  <DistributionDonutChart
+                    items={filteredDescritores}
+                    thresholds={DEFAULT_THRESHOLDS}
+                  />
+                </div>
+              </div>
+
+              {/* TanStack Analytics Table */}
+              <AnalyticsTable
+                data={filteredDescritores}
                 thresholds={DEFAULT_THRESHOLDS}
+                onSelectDescritor={(code) => (window.location.href = `/descritores?code=${code}`)}
               />
             </div>
-            <div>
-              <DistributionDonutChart
-                items={filteredDescritores}
-                thresholds={DEFAULT_THRESHOLDS}
-              />
-            </div>
-          </div>
-
-          {/* TanStack Analytics Table */}
-          <AnalyticsTable
-            data={filteredDescritores}
-            thresholds={DEFAULT_THRESHOLDS}
-            onSelectDescritor={(code) => (window.location.href = `/descritores?code=${code}`)}
-          />
+          )}
         </Content>
       </Layout>
     </Layout>

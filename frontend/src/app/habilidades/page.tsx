@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Layout, Card, Tag, Input, Radio, Table, Badge, Space } from 'antd';
+import { Layout, Card, Tag, Input, Radio, Table, Badge, Space, Alert } from 'antd';
 import { SearchOutlined, BulbOutlined } from '@ant-design/icons';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Header } from '../../components/layout/Header';
@@ -25,13 +25,16 @@ export default function HabilidadesPage() {
   });
 
   const [descritores, setDescritores] = useState<DescritorItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeDisc, setActiveDisc] = useState<'Todos' | 'Língua Portuguesa' | 'Matemática'>('Todos');
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     async function load() {
+      setLoading(true);
       const res = await fetchSaebDescritores(filters, DEFAULT_THRESHOLDS);
       setDescritores(res.descritores);
+      setLoading(false);
     }
     load();
   }, [filters]);
@@ -113,6 +116,8 @@ export default function HabilidadesPage() {
     },
   ];
 
+  const isEmpty = !loading && descritores.length === 0;
+
   return (
     <Layout className="min-h-screen bg-[#F5F5F5] flex flex-row">
       <Sidebar collapsed={collapsed} onCollapse={setCollapsed} />
@@ -126,56 +131,87 @@ export default function HabilidadesPage() {
         />
 
         <Content className="p-6 space-y-4 max-w-7xl mx-auto w-full">
-          {/* Controls Card */}
-          <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <h2 className="text-base font-extrabold text-[#202124] m-0 flex items-center gap-2">
-                  <BulbOutlined className="text-[#FFCC00]" />
-                  Catálogo Completo das Habilidades Avaliadas (9º Ano EF)
-                </h2>
-                <p className="text-xs text-[#5F6368] m-0 mt-1">
-                  Exibindo todas as {filtered.length} habilidades oficiais da Matriz de Referência do SAEB 2023.
-                </p>
-              </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                <Radio.Group
-                  value={activeDisc}
-                  onChange={(e) => setActiveDisc(e.target.value)}
-                  buttonStyle="solid"
-                  className="font-bold text-xs"
-                >
-                  <Radio.Button value="Todos">Todos ({descritores.length})</Radio.Button>
-                  <Radio.Button value="Língua Portuguesa">Português (24)</Radio.Button>
-                  <Radio.Button value="Matemática">Matemática (44)</Radio.Button>
-                </Radio.Group>
-
-                <Input
-                  placeholder="Buscar habilidade..."
-                  prefix={<SearchOutlined className="text-gray-400" />}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-56 text-xs font-medium"
-                  allowClear
-                />
-              </div>
+          {/* Indicador de carregamento sutil */}
+          {loading && (
+            <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-[#FFCC00] rounded-full" style={{ animation: 'loading-bar 1.2s ease-in-out infinite' }} />
             </div>
-          </Card>
-
-          {/* Catalog Table */}
-          <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs" bodyStyle={{ padding: 0 }}>
-            <Table
-              dataSource={filtered}
-              columns={columns}
-              rowKey={(r) => r.CO_DESCRITOR + r.DS_DISCIPLINA}
-              pagination={{ pageSize: 15, showSizeChanger: true, pageSizeOptions: ['15', '30', '68'] }}
-              size="middle"
-              className="text-xs"
+          )}
+          <style jsx>{`
+            @keyframes loading-bar {
+              0% { width: 10%; margin-left: 0; }
+              50% { width: 60%; margin-left: 20%; }
+              100% { width: 10%; margin-left: 90%; }
+            }
+          `}</style>
+          {/* Empty State */}
+          {isEmpty && (
+            <Alert
+              message="Nenhum dado disponível para o recorte selecionado"
+              description={`Não foram encontradas habilidades para os filtros: ${filters.anoEscolar} · ${filters.componente} · ${filters.uf} · Rede: ${filters.rede}. Tente ajustar os filtros.`}
+              type="warning"
+              showIcon
+              className="border-yellow-400 bg-amber-50 rounded-xl"
             />
-          </Card>
+          )}
+
+          {/* Conteúdo — só exibe quando tem dados */}
+          {descritores.length > 0 && (
+            <div className={loading ? 'opacity-50 pointer-events-none transition-opacity duration-300' : 'transition-opacity duration-300'}>
+              {/* Controls Card */}
+              <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-base font-extrabold text-[#202124] m-0 flex items-center gap-2">
+                      <BulbOutlined className="text-[#FFCC00]" />
+                      Catálogo Completo das Habilidades Avaliadas (9º Ano EF)
+                    </h2>
+                    <p className="text-xs text-[#5F6368] m-0 mt-1">
+                      Exibindo todas as {filtered.length} habilidades oficiais da Matriz de Referência do SAEB 2023.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Radio.Group
+                      value={activeDisc}
+                      onChange={(e) => setActiveDisc(e.target.value)}
+                      buttonStyle="solid"
+                      className="font-bold text-xs"
+                    >
+                      <Radio.Button value="Todos">Todos ({descritores.length})</Radio.Button>
+                      <Radio.Button value="Língua Portuguesa">Português ({descritores.filter(d => d.DS_DISCIPLINA === 'Língua Portuguesa').length})</Radio.Button>
+                      <Radio.Button value="Matemática">Matemática ({descritores.filter(d => d.DS_DISCIPLINA === 'Matemática').length})</Radio.Button>
+                    </Radio.Group>
+
+                    <Input
+                      placeholder="Buscar habilidade..."
+                      prefix={<SearchOutlined className="text-gray-400" />}
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-56 text-xs font-medium"
+                      allowClear
+                    />
+                  </div>
+                </div>
+              </Card>
+
+              {/* Catalog Table */}
+              <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs" bodyStyle={{ padding: 0 }}>
+                <Table
+                  dataSource={filtered}
+                  columns={columns}
+                  rowKey={(r) => r.CO_DESCRITOR + r.DS_DISCIPLINA}
+                  pagination={{ pageSize: 15, showSizeChanger: true, pageSizeOptions: ['15', '30', '68'] }}
+                  size="middle"
+                  className="text-xs"
+                />
+              </Card>
+            </div>
+          )}
         </Content>
       </Layout>
     </Layout>
   );
 }
+

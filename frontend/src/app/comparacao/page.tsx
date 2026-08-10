@@ -24,11 +24,14 @@ export default function ComparacaoPage() {
   });
 
   const [equidadeData, setEquidadeData] = useState<{ avgGap: number; items: EquityGapItem[] }>({ avgGap: 19.4, items: [] });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
+      setLoading(true);
       const res = await fetchSaebEquidade(filters);
       setEquidadeData(res);
+      setLoading(false);
     }
     load();
   }, [filters]);
@@ -76,6 +79,8 @@ export default function ComparacaoPage() {
     },
   ];
 
+  const isEmpty = !loading && equidadeData.items.length === 0;
+
   return (
     <Layout className="min-h-screen">
       <Sidebar collapsed={collapsed} onCollapse={setCollapsed} />
@@ -97,35 +102,65 @@ export default function ComparacaoPage() {
             className="border-blue-200 bg-blue-50 rounded-xl"
           />
 
-          <Row gutter={[16, 16]}>
-            <Col span={24} md={8}>
-              <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
-                <span className="text-xs font-bold text-[#5F6368] uppercase">Desigualdade Média (Gap Privada vs Pública)</span>
-                <h2 className="text-3xl font-black text-[#202124] mt-2 mb-0">+{equidadeData.avgGap.toFixed(1)} pp</h2>
-                <p className="text-xs text-[#5F6368] mt-1 m-0">Vantagem média em pontos percentuais da Rede Privada no SAEB 2023</p>
-              </Card>
-            </Col>
-            <Col span={24} md={16}>
-              <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
-                <span className="text-xs font-bold text-[#5F6368] uppercase">Nota Metodológica sobre Equidade</span>
-                <p className="text-xs text-[#202124] mt-2 m-0 leading-relaxed">
-                  O Gap em pontos percentuais representa a diferença direta de acertos entre os estudantes da Rede Privada e da Rede Pública. Esta métrica possibilita identificar habilidades com maior assimetria de aprendizado sem necessidade de dados temporais.
-                </p>
-              </Card>
-            </Col>
-          </Row>
-
-          <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs" title={<span className="font-extrabold text-[#202124]">Comparativo por Habilidade: Rede Pública vs Rede Privada (2023)</span>}>
-            <Table
-              dataSource={equidadeData.items}
-              columns={columns}
-              rowKey={(r) => r.CO_DESCRITOR + r.DS_DISCIPLINA}
-              pagination={{ pageSize: 12 }}
-              size="small"
+          {/* Indicador de carregamento sutil */}
+          {loading && (
+            <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-[#FFCC00] rounded-full" style={{ animation: 'loading-bar 1.2s ease-in-out infinite' }} />
+            </div>
+          )}
+          <style jsx>{`
+            @keyframes loading-bar {
+              0% { width: 10%; margin-left: 0; }
+              50% { width: 60%; margin-left: 20%; }
+              100% { width: 10%; margin-left: 90%; }
+            }
+          `}</style>
+          {/* Empty State */}
+          {isEmpty && (
+            <Alert
+              message="Nenhum dado de equidade disponível para o recorte selecionado"
+              description={`Não foram encontrados dados comparativos entre redes para os filtros: ${filters.anoEscolar} · ${filters.componente} · ${filters.uf}. Tente ajustar os filtros.`}
+              type="warning"
+              showIcon
+              className="border-yellow-400 bg-amber-50 rounded-xl"
             />
-          </Card>
+          )}
+
+          {/* Conteúdo — só exibe quando tem dados */}
+          {equidadeData.items.length > 0 && (
+            <div className={loading ? 'opacity-50 pointer-events-none transition-opacity duration-300' : 'transition-opacity duration-300'}>
+              <Row gutter={[16, 16]}>
+                <Col span={24} md={8}>
+                  <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
+                    <span className="text-xs font-bold text-[#5F6368] uppercase">Desigualdade Média (Gap Privada vs Pública)</span>
+                    <h2 className="text-3xl font-black text-[#202124] mt-2 mb-0">+{equidadeData.avgGap.toFixed(1)} pp</h2>
+                    <p className="text-xs text-[#5F6368] mt-1 m-0">Vantagem média em pontos percentuais da Rede Privada no SAEB 2023</p>
+                  </Card>
+                </Col>
+                <Col span={24} md={16}>
+                  <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
+                    <span className="text-xs font-bold text-[#5F6368] uppercase">Nota Metodológica sobre Equidade</span>
+                    <p className="text-xs text-[#202124] mt-2 m-0 leading-relaxed">
+                      O Gap em pontos percentuais representa a diferença direta de acertos entre os estudantes da Rede Privada e da Rede Pública. Esta métrica possibilita identificar habilidades com maior assimetria de aprendizado sem necessidade de dados temporais.
+                    </p>
+                  </Card>
+                </Col>
+              </Row>
+
+              <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs" title={<span className="font-extrabold text-[#202124]">Comparativo por Habilidade: Rede Pública vs Rede Privada (2023)</span>}>
+                <Table
+                  dataSource={equidadeData.items}
+                  columns={columns}
+                  rowKey={(r) => r.CO_DESCRITOR + r.DS_DISCIPLINA}
+                  pagination={{ pageSize: 12 }}
+                  size="small"
+                />
+              </Card>
+            </div>
+          )}
         </Content>
       </Layout>
     </Layout>
   );
 }
+

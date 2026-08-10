@@ -17,7 +17,7 @@ export function classifyPerformance(pct: number, thresholds: PerformanceThreshol
 export async function fetchSaebDescritores(
   filters: SaebFilterState,
   thresholds: PerformanceThresholds = DEFAULT_THRESHOLDS
-): Promise<{ kpis: SaebKpiData; descritores: DescritorItem[] }> {
+): Promise<{ kpis: SaebKpiData | null; descritores: DescritorItem[] }> {
   try {
     const params = new URLSearchParams({
       ano: filters.anoEscolar || '9º Ano EF',
@@ -31,6 +31,12 @@ export async function fetchSaebDescritores(
     if (res.ok) {
       const data = await res.json();
       
+      // API respondeu OK mas sem dados — retornar resultado vazio real
+      // (não cair no fallback, que mostraria dados genéricos inconsistentes)
+      if (!data.descritores || data.descritores.length === 0) {
+        return { kpis: null, descritores: [] };
+      }
+
       const descritores: DescritorItem[] = (data.descritores || []).map((item: any) => {
         const perf = classifyPerformance(item.pct, thresholds);
         return {
@@ -53,11 +59,11 @@ export async function fetchSaebDescritores(
       const totalEstudantes = data.kpis?.total_estudantes || (
         data.kpis?.total_respostas
           ? Math.round(data.kpis.total_respostas / itemsPerStudent)
-          : 2489289
+          : 0
       );
 
       const kpis: SaebKpiData = {
-        mediaGeral: data.kpis?.media_geral || 46.8,
+        mediaGeral: data.kpis?.media_geral ?? 0,
         totalEstudantes,
         totalEscolas: 0,
         totalMunicipios: 0,
@@ -67,13 +73,13 @@ export async function fetchSaebDescritores(
           disc: data.kpis.top_descritor.disc,
           pct: data.kpis.top_descritor.pct,
           desc: data.kpis.top_descritor.desc
-        } : { codigo: 'D5', disc: 'Língua Portuguesa', pct: 69.6, desc: 'Interpretar texto com auxílio de material gráfico diverso' },
+        } : { codigo: descritores[0]?.CO_DESCRITOR || '--', disc: descritores[0]?.DS_DISCIPLINA || '', pct: descritores[0]?.pct || 0, desc: descritores[0]?.descricao || '' },
         worstDescritor: data.kpis?.worst_descritor ? {
           codigo: data.kpis.worst_descritor.codigo,
           disc: data.kpis.worst_descritor.disc,
           pct: data.kpis.worst_descritor.pct,
           desc: data.kpis.worst_descritor.desc
-        } : { codigo: 'D15', disc: 'Matemática', pct: 12.8, desc: 'Resolver problema utilizando relações entre diferentes unidades de medida' },
+        } : { codigo: descritores[descritores.length - 1]?.CO_DESCRITOR || '--', disc: descritores[descritores.length - 1]?.DS_DISCIPLINA || '', pct: descritores[descritores.length - 1]?.pct || 0, desc: descritores[descritores.length - 1]?.descricao || '' },
         criticosCount: criticosCount,
         criticosPct: descritores.length > 0 ? parseFloat(((criticosCount * 100) / descritores.length).toFixed(1)) : 0
       };

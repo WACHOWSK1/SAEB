@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Layout, Card, Table, Tag, Statistic } from 'antd';
+import { Layout, Card, Table, Tag, Statistic, Alert } from 'antd';
 import ReactECharts from 'echarts-for-react';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Header } from '../../components/layout/Header';
@@ -26,6 +26,7 @@ export default function TerritorialPage() {
   });
 
   const [ufData, setUfData] = useState<{ mediaBr: number; ufs: UfPerformanceItem[] }>({ mediaBr: 46.8, ufs: [] });
+  const [loading, setLoading] = useState(true);
 
   const ufsList = [
     'Brasil (Todos)',
@@ -40,15 +41,20 @@ export default function TerritorialPage() {
 
   useEffect(() => {
     async function load() {
+      setLoading(true);
       const res = await fetchSaebUfs(filters);
       setUfData(res);
+      setLoading(false);
     }
     load();
   }, [filters]);
 
   const sortedUfs = [...ufData.ufs].sort((a, b) => b.pct - a.pct);
-  const topUf = sortedUfs[0] || { NM_UF: 'Paraná', pct: 52.5 };
-  const worstUf = sortedUfs[sortedUfs.length - 1] || { NM_UF: 'Roraima', pct: 34.6 };
+  const topUf = sortedUfs[0] || { NM_UF: '--', pct: 0 };
+  const worstUf = sortedUfs[sortedUfs.length - 1] || { NM_UF: '--', pct: 0 };
+
+  // Verificar se há uma UF específica selecionada no filtro
+  const selectedUf = filters.uf !== 'Brasil (Todos)' ? filters.uf : null;
 
   // Apache ECharts State Bar Chart with National Benchmark Line
   const barOption = {
@@ -65,9 +71,10 @@ export default function TerritorialPage() {
         const item = params[0];
         const diff = item.value - ufData.mediaBr;
         const diffText = diff >= 0 ? `+${diff.toFixed(1)} pp vs Brasil` : `${diff.toFixed(1)} pp vs Brasil`;
+        const isSelected = selectedUf === item.name;
         return `
           <div style="font-family: Inter; font-size: 12px; padding: 4px;">
-            <b>${item.name}</b><br/>
+            <b>${item.name}</b>${isSelected ? ' <span style="color: #1976D2;">★ Selecionado</span>' : ''}<br/>
             Taxa de Acerto Média: <b>${item.value.toFixed(1)}%</b><br/>
             Comparativo Nacional: <b>${diffText}</b>
           </div>
@@ -83,8 +90,8 @@ export default function TerritorialPage() {
     },
     yAxis: {
       type: 'value',
-      min: Math.max(0, Math.floor(Math.min(...sortedUfs.map(u => u.pct), ufData.mediaBr) - 5)),
-      max: Math.min(100, Math.ceil(Math.max(...sortedUfs.map(u => u.pct), ufData.mediaBr) + 5)),
+      min: sortedUfs.length > 0 ? Math.max(0, Math.floor(Math.min(...sortedUfs.map(u => u.pct), ufData.mediaBr) - 5)) : 0,
+      max: sortedUfs.length > 0 ? Math.min(100, Math.ceil(Math.max(...sortedUfs.map(u => u.pct), ufData.mediaBr) + 5)) : 100,
       axisLabel: { formatter: '{value}%', fontFamily: 'Inter', fontSize: 11 },
       splitLine: { lineStyle: { color: '#E4E4E4', type: 'dashed' } }
     },
@@ -93,13 +100,19 @@ export default function TerritorialPage() {
         name: 'Taxa de Acerto (%)',
         type: 'bar',
         barWidth: 16,
-        data: sortedUfs.map(u => ({
-          value: u.pct,
-          itemStyle: {
-            color: u.pct >= ufData.mediaBr ? '#388E3C' : '#F57C00',
-            borderRadius: [4, 4, 0, 0]
-          }
-        })),
+        data: sortedUfs.map(u => {
+          // Destacar UF selecionada com cor diferente e borda
+          const isSelected = selectedUf === u.NM_UF;
+          return {
+            value: u.pct,
+            itemStyle: {
+              color: isSelected ? '#1976D2' : (u.pct >= ufData.mediaBr ? '#388E3C' : '#F57C00'),
+              borderRadius: [4, 4, 0, 0],
+              borderColor: isSelected ? '#0D47A1' : 'transparent',
+              borderWidth: isSelected ? 2 : 0,
+            }
+          };
+        }),
         markLine: {
           symbol: 'none',
           data: [
@@ -126,7 +139,10 @@ export default function TerritorialPage() {
       title: 'Estado (UF)',
       dataIndex: 'NM_UF',
       key: 'NM_UF',
-      render: (v: string) => <span className="font-extrabold text-xs text-[#202124]">{v}</span>
+      render: (v: string) => {
+        const isSelected = selectedUf === v;
+        return <span className={`font-extrabold text-xs ${isSelected ? 'text-[#1976D2]' : 'text-[#202124]'}`}>{v} {isSelected ? '★' : ''}</span>;
+      }
     },
     {
       title: 'Taxa Média de Acerto (%)',
@@ -166,6 +182,8 @@ export default function TerritorialPage() {
     },
   ];
 
+  const isEmpty = !loading && ufData.ufs.length === 0;
+
   return (
     <Layout className="min-h-screen bg-[#F5F5F5] flex flex-row">
       <Sidebar collapsed={collapsed} onCollapse={setCollapsed} />
@@ -183,56 +201,98 @@ export default function TerritorialPage() {
             <FilterBar filters={filters} onFilterChange={(u) => setFilters((p) => ({ ...p, ...u }))} ufsList={ufsList} />
           </div>
 
-          {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
-              <Statistic
-                title={<span className="text-xs font-bold text-[#5F6368] uppercase">Média Nacional - {filters.anoEscolar || '9º Ano EF'}</span>}
-                value={ufData.mediaBr.toFixed(1)}
-                suffix="%"
-                styles={{ content: { color: '#FFCC00', fontWeight: 900, fontSize: '28px' } }}
-              />
-              <p className="text-xs text-[#5F6368] m-0 mt-1">27 Unidades da Federação avaliadas</p>
-            </Card>
-
-            <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
-              <Statistic
-                title={<span className="text-xs font-bold text-[#5F6368] uppercase">Estado com Maior Acerto</span>}
-                value={topUf.pct.toFixed(1)}
-                suffix="%"
-                styles={{ content: { color: '#388E3C', fontWeight: 900, fontSize: '28px' } }}
-              />
-              <p className="text-xs font-bold text-[#202124] m-0 mt-1">{topUf.NM_UF}</p>
-            </Card>
-
-            <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
-              <Statistic
-                title={<span className="text-xs font-bold text-[#5F6368] uppercase">Estado com Menor Acerto</span>}
-                value={worstUf.pct.toFixed(1)}
-                suffix="%"
-                styles={{ content: { color: '#D32F2F', fontWeight: 900, fontSize: '28px' } }}
-              />
-              <p className="text-xs font-bold text-[#202124] m-0 mt-1">{worstUf.NM_UF}</p>
-            </Card>
-          </div>
-
-          {/* Clean State Performance Bar Chart */}
-          <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs p-2">
-            <ReactECharts option={barOption} style={{ height: '420px', width: '100%' }} opts={{ renderer: 'canvas' }} />
-          </Card>
-
-          {/* Full State Table */}
-          <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs" title={<span className="font-extrabold text-[#202124]">Ranking Territorial Completo de todas as 27 UFs ({filters.anoEscolar || '9º Ano EF'} · SAEB 2023)</span>}>
-            <Table
-              dataSource={sortedUfs}
-              columns={columns}
-              rowKey="NM_UF"
-              pagination={{ pageSize: 27 }}
-              size="small"
+          {/* Indicador de carregamento sutil */}
+          {loading && (
+            <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-[#FFCC00] rounded-full" style={{ animation: 'loading-bar 1.2s ease-in-out infinite' }} />
+            </div>
+          )}
+          <style jsx>{`
+            @keyframes loading-bar {
+              0% { width: 10%; margin-left: 0; }
+              50% { width: 60%; margin-left: 20%; }
+              100% { width: 10%; margin-left: 90%; }
+            }
+          `}</style>
+          {/* Empty State */}
+          {isEmpty && (
+            <Alert
+              message="Nenhum dado territorial disponível para o recorte selecionado"
+              description={`Não foram encontrados dados por UF para os filtros: ${filters.anoEscolar} · ${filters.componente} · Rede: ${filters.rede}. Tente ajustar os filtros.`}
+              type="warning"
+              showIcon
+              className="border-yellow-400 bg-amber-50 rounded-xl"
             />
-          </Card>
+          )}
+
+          {/* Conteúdo — só exibe quando tem dados */}
+          {ufData.ufs.length > 0 && (
+            <div className={loading ? 'opacity-50 pointer-events-none transition-opacity duration-300' : 'transition-opacity duration-300'}>
+              {/* Nota de UF selecionada */}
+              {selectedUf && (
+                <Alert
+                  message={`Estado em destaque: ${selectedUf}`}
+                  description="A UF selecionada no filtro está destacada em azul no gráfico e na tabela abaixo. Os dados completos de todas as 27 UFs continuam visíveis para comparação."
+                  type="info"
+                  showIcon
+                  className="border-blue-200 bg-blue-50 rounded-xl"
+                />
+              )}
+
+              {/* Summary Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
+                  <Statistic
+                    title={<span className="text-xs font-bold text-[#5F6368] uppercase">Média Nacional - {filters.anoEscolar || '9º Ano EF'}</span>}
+                    value={ufData.mediaBr.toFixed(1)}
+                    suffix="%"
+                    styles={{ content: { color: '#FFCC00', fontWeight: 900, fontSize: '28px' } }}
+                  />
+                  <p className="text-xs text-[#5F6368] m-0 mt-1">{sortedUfs.length} Unidades da Federação avaliadas</p>
+                </Card>
+
+                <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
+                  <Statistic
+                    title={<span className="text-xs font-bold text-[#5F6368] uppercase">Estado com Maior Acerto</span>}
+                    value={topUf.pct.toFixed(1)}
+                    suffix="%"
+                    styles={{ content: { color: '#388E3C', fontWeight: 900, fontSize: '28px' } }}
+                  />
+                  <p className="text-xs font-bold text-[#202124] m-0 mt-1">{topUf.NM_UF}</p>
+                </Card>
+
+                <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
+                  <Statistic
+                    title={<span className="text-xs font-bold text-[#5F6368] uppercase">Estado com Menor Acerto</span>}
+                    value={worstUf.pct.toFixed(1)}
+                    suffix="%"
+                    styles={{ content: { color: '#D32F2F', fontWeight: 900, fontSize: '28px' } }}
+                  />
+                  <p className="text-xs font-bold text-[#202124] m-0 mt-1">{worstUf.NM_UF}</p>
+                </Card>
+              </div>
+
+              {/* Clean State Performance Bar Chart */}
+              <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs p-2">
+                <ReactECharts option={barOption} style={{ height: '420px', width: '100%' }} opts={{ renderer: 'canvas' }} />
+              </Card>
+
+              {/* Full State Table */}
+              <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs" title={<span className="font-extrabold text-[#202124]">Ranking Territorial Completo de todas as {sortedUfs.length} UFs ({filters.anoEscolar || '9º Ano EF'} · SAEB 2023)</span>}>
+                <Table
+                  dataSource={sortedUfs}
+                  columns={columns}
+                  rowKey="NM_UF"
+                  pagination={{ pageSize: 27 }}
+                  size="small"
+                  rowClassName={(record) => selectedUf === record.NM_UF ? 'bg-blue-50' : ''}
+                />
+              </Card>
+            </div>
+          )}
         </Content>
       </Layout>
     </Layout>
   );
 }
+
