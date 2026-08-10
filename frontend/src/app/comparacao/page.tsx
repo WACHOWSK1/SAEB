@@ -102,19 +102,6 @@ export default function ComparacaoPage() {
             className="border-blue-200 bg-blue-50 rounded-xl"
           />
 
-          {/* Indicador de carregamento sutil */}
-          {loading && (
-            <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
-              <div className="h-full bg-[#FFCC00] rounded-full" style={{ animation: 'loading-bar 1.2s ease-in-out infinite' }} />
-            </div>
-          )}
-          <style jsx>{`
-            @keyframes loading-bar {
-              0% { width: 10%; margin-left: 0; }
-              50% { width: 60%; margin-left: 20%; }
-              100% { width: 10%; margin-left: 90%; }
-            }
-          `}</style>
           {/* Empty State */}
           {isEmpty && (
             <Alert

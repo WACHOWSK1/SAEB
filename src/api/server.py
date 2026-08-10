@@ -80,12 +80,122 @@ DESCRITORES_MT = {
     '9N1.7': 'Resolver problemas com números racionais (frações e decimais)'
 }
 
+DESCRITORES_EXTENDED = {
+    # 2º Ano EF - Língua Portuguesa
+    'H1.1': 'Identificar letras do alfabeto',
+    'H1.2': 'Reconhecer diferentes formas gráficas de letras',
+    'H2.1': 'Identificar o número de sílabas de uma palavra',
+    'H2.2': 'Reconhecer a sílaba inicial ou final de palavras',
+    'H4': 'Localizar informação explícita em textos curtos',
+    'H5': 'Inferir informação em textos verbais e não-verbais',
+    'H6': 'Identificar assunto principal de um texto',
+    'H7': 'Reconhecer o gênero textual de um texto curto',
+    'H8.1': 'Reconhecer pontuação de final de frase',
+    'H8.2': 'Identificar efeitos de sentido decorrentes de pontuação/notação',
+    'H9': 'Reconhecer o conflito gerador do enredo em textos narrativos curtos',
+
+    # 2º Ano EF - Matemática
+    '2A1.1': 'Resolver problemas de adição e subtração com números naturais',
+    '2A1.2': 'Reconhecer contagem e ordenação de elementos',
+    '2A1.3': 'Identificar composição e decomposição de números naturais',
+    '2A1.4': 'Comparar quantidades de objetos de dois conjuntos',
+    '2E1.1': 'Interpretar dados em tabelas simples',
+    '2E1.2': 'Interpretar informações em gráficos de colunas',
+    '2E1.3': 'Ler e organizar dados estatísticos elementares',
+    '2G1.1': 'Identificar figuras geométricas espaciais',
+    '2G1.2': 'Reconhecer figuras geométricas planas',
+    '2G1.3': 'Identificar a localização de objetos no espaço',
+    '2M1.1': 'Comparar comprimentos, massas e capacidades',
+    '2M1.2': 'Identificar horas e medidas de tempo',
+    '2M1.3': 'Comparar capacidades e massas utilizando termos de referência',
+    '2M1.4': 'Reconhecer valores de moedas e cédulas do sistema monetário',
+    '2M1.5': 'Reconhecer unidades de medida de tempo (dias, semanas, meses)',
+    '2M1.6': 'Estimar e comparar durações de eventos e intervalos de tempo',
+    '2M1.7': 'Ler horas inteiras e meias horas em relógios digitais ou analógicos',
+    '2M2.1': 'Identificar equivalência de valores de cédulas e moedas',
+    '2M2.2': 'Resolver problemas de compra e venda com dinheiro do sistema monetário',
+    '2M2.3': 'Resolver problemas envolvendo o sistema monetário brasileiro',
+    '2N1.1': 'Reconhecer e escrever a representação numérica de quantidades',
+    '2N1.2': 'Comparar e ordenar números naturais pela compreensão do sistema decimal',
+    '2N1.3': 'Identificar o valor posicional dos algarismos em números naturais',
+    '2N1.4': 'Compor e decompor números naturais de até três ordens',
+    '2N1.5': 'Estimar e comparar quantidades de objetos em conjuntos',
+    '2N1.6': 'Resolver problemas de adição envolvendo as ideias de juntar e acrescentar',
+    '2N1.7': 'Resolver problemas de subtração envolvendo as ideias de retirar e comparar',
+    '2N1.8': 'Resolver problemas de multiplicação ou divisão com suporte de imagens',
+    '2N2.1': 'Reconhecer a representação gráfica de números naturais',
+    '2N2.2': 'Identificar frações unitárias ou partes de um conjunto de objetos',
+    '2N2.3': 'Resolver problemas simples com ideias de metade e terça parte',
+
+    # 5º Ano EF
+    'H2': 'Reconhecer a sílaba tônica ou padrão silábico em palavras',
+    'H8': 'Identificar a finalidade ou o assunto de textos instrucionais e informativos',
+    'H13': 'Reconhecer o uso de pontuação como recurso expressivo',
+    'H14': 'Distinguir o sentido de conjunções e conectivos em textos adaptados',
+    '5E1.2': 'Ler dados expressos em tabelas de dupla entrada',
+    '5G1.1': 'Identificar propriedades de polígonos e figuras planas',
+    '5G1.4': 'Reconhecer vistas de objetos tridimensionais',
+    '5G1.6': 'Identificar planificações de sólidos geométricos',
+    '5G1.8': 'Reconhecer simetria de reflexão em figuras geométricas',
+    '5M2.2': 'Resolver problemas envolvendo unidades de medida de tempo',
+    '5N1.3': 'Resolver problemas com números naturais e operações fundamentais',
+    '5N1.4': 'Identificar frações como representação associada à parte de um todo',
+    '5N1.5': 'Reconhecer a representação decimal de números racionais',
+    '5N1.8': 'Resolver problemas simples que envolvam porcentagem',
+    '5N2.3': 'Resolver problemas com números racionais na representação decimal',
+    '5N2.4': 'Identificar frações equivalentes em diferentes representações',
+    '5N2.7': 'Efetuar adição ou subtração com números racionais decimais',
+
+    # Ensino Médio
+    'D32': 'Resolver problema envolvendo cálculo de probabilidade de um evento',
+
+    # Ciências Humanas (CH)
+    '1.0/A1': 'Analisar transformações sociais e territoriais no tempo e no espaço',
+    '1.0/B1': 'Compreender formas de organização social, política e cultural',
+    '1.0/C1': 'Identificar marcos históricos e diversidade de sujeitos sociais',
+    '2.0/A2': 'Analisar a interação entre sociedade, natureza e espaço geográfico',
+    '2.0/B2': 'Compreender a dinâmica populacional e os fluxos migratórios',
+    '2.0/C2': 'Identificar os impactos ambientais da ação humana nos territórios',
+    '3.0/A3': 'Reconhecer processos de ocupação, cidadania e constituição de direitos',
+    '3.0/B3': 'Compreender lutas sociais e formas de representação política',
+    '3.0/C3': 'Analisar a construção de identidades e patrimônios culturais',
+    '4.0/A4': 'Reconhecer a diversidade cultural, direitos humanos e memórias históricas',
+    '4.0/B4': 'Analisar relações de poder e geopolítica nos espaços urbanos e rurais',
+    '4.0/C4': 'Compreender os meios de produção e o trabalho na sociedade contemporânea',
+    '5.0/A5': 'Compreender a formação histórica das cidades e a urbanização',
+    '5.0/B5': 'Analisar processos de migração e distribuição da população no território',
+    '5.0/C5': 'Identificar os impactos socioambientais da expansão urbana e agrícola',
+    '6.0/A6': 'Compreender a cidadania, Direitos Humanos e constituição das leis',
+    '6.0/B6': 'Analisar lutas sociais, movimentos de resistência e inclusão',
+    '6.0/C6': 'Identificar patrimônios materiais e imateriais e memória cultural',
+    'A4': 'Analisar a organização geopolítica, fronteiras e estados nacionais',
+    'A5': 'Compreender a dinâmica de crescimento urbano e transformações sociais',
+    'A6': 'Analisar instâncias de participação democrática e direitos cidadãos',
+    'B4': 'Compreender as redes de transporte, comunicação e a globalização',
+    'B5': 'Analisar a estrutura demográfica e os movimentos migratórios',
+    'B6': 'Compreender políticas públicas e movimentos de inclusão social',
+    'C4': 'Analisar o desenvolvimento econômico, industrialização e o trabalho',
+    'C5': 'Identificar problemas ambientais urbanos e rurais no espaço brasileiro',
+    'C6': 'Analisar manifestações culturais, mídias e patrimônio histórico',
+
+    # Ciências da Natureza (CN)
+    'A1': 'Compreender matéria, energia e suas transformações no ambiente',
+    'A2': 'Analisar processos biológicos, saúde humana e ecossistemas',
+    'A3': 'Identificar fenômenos astronômicos, estrutura da Terra e sistema solar',
+    'B1': 'Reconhecer propriedades dos materiais e ciclos da matéria na natureza',
+    'B2': 'Analisar interações dos seres vivos, teias alimentares e biodiversidade',
+    'B3': 'Compreender recursos hídricos, atmosféricos e sustentabilidade ambiental',
+    'C1': 'Identificar fontes de energia, ondas, luz e som no cotidiano',
+    'C2': 'Compreender hereditariedade, reprodução e funcionamento do corpo humano',
+    'C3': 'Analisar o impacto de tecnologias e intervenções humanas na biosfera'
+}
+
 def get_desc_text(code, disc):
     if disc == 'Língua Portuguesa':
-        return DESCRITORES_LP.get(code, f"Descritor {code}")
+        return DESCRITORES_LP.get(code, DESCRITORES_EXTENDED.get(code, f"Descritor {code}"))
     elif disc == 'Matemática':
-        return DESCRITORES_MT.get(code, f"Descritor {code}")
-    return f"Descritor {code}"
+        return DESCRITORES_MT.get(code, DESCRITORES_EXTENDED.get(code, f"Descritor {code}"))
+    return DESCRITORES_EXTENDED.get(code, f"Descritor {code}")
 
 # ─── Load Parquet Dataset ────────────────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

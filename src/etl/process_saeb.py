@@ -15,6 +15,7 @@ if hasattr(sys.stdout, 'reconfigure'):
 
 # Diretórios de entrada e saída
 DATA_RAW_DIR = r"C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTAÇÃO\FUNDAMENTAÇÃO TEÓRICA\HABILIDADES SAEB\microdados_saeb_2023\MICRODADOS_SAEB_2023\DADOS"
+DATA_OUTROS_DIR = os.path.join(DATA_RAW_DIR, "OUTROS ANOS")
 DATA_PROC_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "processed")
 
 # Mapping das UFs
@@ -33,6 +34,15 @@ DISCIPLINA_NAMES = {
     'CH': 'Ciências Humanas',
     'CN': 'Ciências da Natureza'
 }
+
+def find_file(filename: str) -> str:
+    p1 = os.path.join(DATA_RAW_DIR, filename)
+    if os.path.exists(p1):
+        return p1
+    p2 = os.path.join(DATA_OUTROS_DIR, filename)
+    if os.path.exists(p2):
+        return p2
+    return None
 
 def load_items_to_duckdb(con: duckdb.DuckDBPyConnection, items_csv_path: str):
     print(f"Lendo metadados de itens ({items_csv_path})...", flush=True)
@@ -57,7 +67,9 @@ def run_etl():
     os.makedirs(DATA_PROC_DIR, exist_ok=True)
     
     con = duckdb.connect()
-    items_path = os.path.join(DATA_RAW_DIR, "TS_ITEM.csv")
+    items_path = find_file("TS_ITEM.csv")
+    if not items_path:
+        raise FileNotFoundError("Arquivo TS_ITEM.csv não localizado!")
     load_items_to_duckdb(con, items_path)
     
     file_configs = [
@@ -70,16 +82,17 @@ def run_etl():
     all_results = []
     
     for cfg in file_configs:
-        file_path = os.path.join(DATA_RAW_DIR, cfg["file"]).replace('\\', '/')
-        if not os.path.exists(file_path):
-            print(f"Aviso: Arquivo nao encontrado: {file_path}. Pulando...", flush=True)
+        file_path = find_file(cfg["file"])
+        if not file_path:
+            print(f"Aviso: Arquivo nao encontrado: {cfg['file']}. Pulando...", flush=True)
             continue
             
+        file_path_clean = file_path.replace('\\', '/')
         print(f"\nProcessando {cfg['file']} ({cfg['ano_label']})...", flush=True)
         t_file = time.time()
         
         con.execute("DROP TABLE IF EXISTS current_students")
-        con.execute(f"CREATE TABLE current_students AS SELECT * FROM read_csv_auto('{file_path}', delim=';', header=True, ignore_errors=True)")
+        con.execute(f"CREATE TABLE current_students AS SELECT * FROM read_csv_auto('{file_path_clean}', delim=';', header=True, ignore_errors=True)")
         print(f" - Tabela {cfg['file']} carregada no DuckDB em {time.time()-t_file:.2f}s.", flush=True)
         
         columns = [col[0].upper() for col in con.execute("DESCRIBE current_students").fetchall()]

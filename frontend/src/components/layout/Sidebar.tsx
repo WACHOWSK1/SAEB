@@ -10,6 +10,7 @@ import {
   BulbOutlined,
   GlobalOutlined,
   SettingOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -47,6 +48,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
       key: '/metodologia',
       icon: <SettingOutlined />,
       label: <Link href="/metodologia">Metodologia e Dados</Link>,
+    },
+    {
+      key: '/sobre',
+      icon: <InfoCircleOutlined />,
+      label: <Link href="/sobre">Sobre</Link>,
     },
   ];
 

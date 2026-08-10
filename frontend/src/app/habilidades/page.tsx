@@ -5,6 +5,7 @@ import { Layout, Card, Tag, Input, Radio, Table, Badge, Space, Alert } from 'ant
 import { SearchOutlined, BulbOutlined } from '@ant-design/icons';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Header } from '../../components/layout/Header';
+import { FilterBar } from '../../components/layout/FilterBar';
 import { SaebFilterState, DescritorItem, DEFAULT_THRESHOLDS } from '../../types/saeb';
 import { fetchSaebDescritores, classifyPerformance } from '../../services/api';
 
@@ -28,6 +29,17 @@ export default function HabilidadesPage() {
   const [loading, setLoading] = useState(true);
   const [activeDisc, setActiveDisc] = useState<'Todos' | 'Língua Portuguesa' | 'Matemática'>('Todos');
   const [searchTerm, setSearchTerm] = useState('');
+
+  const ufsList = [
+    'Brasil (Todos)',
+    'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará',
+    'Distrito Federal', 'Espírito Santo', 'Goiás', 'Maranhão',
+    'Mato Grosso', 'Mato Grosso do Sul', 'Minas Gerais', 'Pará',
+    'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
+    'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul',
+    'Rondônia', 'Roraima', 'Santa Catarina', 'São Paulo',
+    'Sergipe', 'Tocantins'
+  ];
 
   useEffect(() => {
     async function load() {
@@ -131,20 +143,12 @@ export default function HabilidadesPage() {
         />
 
         <Content className="p-6 space-y-4 max-w-7xl mx-auto w-full">
+          {/* Filter Bar */}
+          <div className="mb-4">
+            <FilterBar filters={filters} onFilterChange={(u) => setFilters((p) => ({ ...p, ...u }))} ufsList={ufsList} />
+          </div>
 
-          {/* Indicador de carregamento sutil */}
-          {loading && (
-            <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
-              <div className="h-full bg-[#FFCC00] rounded-full" style={{ animation: 'loading-bar 1.2s ease-in-out infinite' }} />
-            </div>
-          )}
-          <style jsx>{`
-            @keyframes loading-bar {
-              0% { width: 10%; margin-left: 0; }
-              50% { width: 60%; margin-left: 20%; }
-              100% { width: 10%; margin-left: 90%; }
-            }
-          `}</style>
+
           {/* Empty State */}
           {isEmpty && (
             <Alert
@@ -165,10 +169,10 @@ export default function HabilidadesPage() {
                   <div>
                     <h2 className="text-base font-extrabold text-[#202124] m-0 flex items-center gap-2">
                       <BulbOutlined className="text-[#FFCC00]" />
-                      Catálogo Completo das Habilidades Avaliadas (9º Ano EF)
+                      Catálogo Completo das Habilidades Avaliadas ({filters.anoEscolar || '9º Ano EF'})
                     </h2>
                     <p className="text-xs text-[#5F6368] m-0 mt-1">
-                      Exibindo todas as {filtered.length} habilidades oficiais da Matriz de Referência do SAEB 2023.
+                      Exibindo todas as {filtered.length} habilidades oficiais da Matriz de Referência ({filters.anoEscolar} · SAEB 2023).
                     </p>
                   </div>
 
@@ -214,4 +218,3 @@ export default function HabilidadesPage() {
     </Layout>
   );
 }
-
