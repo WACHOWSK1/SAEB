@@ -15,6 +15,7 @@ import { FilterBar } from '../components/layout/FilterBar';
 import { KpiCard } from '../components/kpi/KpiCard';
 import { DescriptorRankingChart } from '../components/charts/DescriptorRankingChart';
 import { DistributionDonutChart } from '../components/charts/DistributionDonutChart';
+import { RadarDimensionsChart } from '../components/charts/RadarDimensionsChart';
 import { AnalyticsTable } from '../components/tables/AnalyticsTable';
 import { SaebFilterState, SaebKpiData, DescritorItem, DEFAULT_THRESHOLDS } from '../types/saeb';
 import { fetchSaebDescritores } from '../services/api';
@@ -203,6 +204,10 @@ export default function VisaoGeralPage() {
                   <DistributionDonutChart
                     items={filteredDescritores}
                     thresholds={DEFAULT_THRESHOLDS}
+                  />
+                  <RadarDimensionsChart
+                    items={filteredDescritores}
+                    title="Desempenho por Eixo Temático"
                   />
                 </div>
               </div>
