@@ -104,7 +104,7 @@ export const DistributionDonutChart: React.FC<DistributionDonutChartProps> = ({
 
   return (
     <div className="w-full bg-white p-3 rounded-xl border border-[#E4E4E4] shadow-2xs">
-      <ReactECharts option={option} style={{ height: '380px', width: '100%' }} opts={{ renderer: 'canvas' }} />
+      <ReactECharts option={option} notMerge={true} lazyUpdate={true} style={{ height: '380px', width: '100%' }} opts={{ renderer: 'canvas' }} />
     </div>
   );
 };

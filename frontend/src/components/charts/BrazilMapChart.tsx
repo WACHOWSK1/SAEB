@@ -142,6 +142,8 @@ export const BrazilMapChart: React.FC<BrazilMapChartProps> = ({ ufsData, mediaBr
     <div className="w-full bg-white p-3 rounded-xl border border-[#E4E4E4] shadow-2xs">
       <ReactECharts
         option={option}
+        notMerge={true}
+        lazyUpdate={true}
         style={{ height: '540px', width: '100%' }}
         opts={{ renderer: 'canvas' }}
       />

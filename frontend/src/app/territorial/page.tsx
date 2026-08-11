@@ -261,7 +261,7 @@ export default function TerritorialPage() {
 
               {/* Clean State Performance Bar Chart */}
               <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs p-2">
-                <ReactECharts option={barOption} style={{ height: '420px', width: '100%' }} opts={{ renderer: 'canvas' }} />
+                <ReactECharts option={barOption} notMerge={true} lazyUpdate={true} style={{ height: '420px', width: '100%' }} opts={{ renderer: 'canvas' }} />
               </Card>
 
               {/* Full State Table */}

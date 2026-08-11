@@ -225,16 +225,20 @@ app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
 
 def filter_dataset(ano="9º Ano EF", disc="Todos", uf="Brasil (Todos)", rede="Todas"):
     fdf = df_raw.copy()
-    if ano != "Todos":
+    if ano and ano not in ["Todos", "Todos os Anos"]:
         fdf = fdf[fdf["ANO_ESCOLAR"] == ano]
-    if disc == "Todos":
+        
+    if disc in ["Todos", "LP+MT"]:
         fdf = fdf[fdf["DS_DISCIPLINA"].isin(["Língua Portuguesa", "Matemática"])]
-    elif disc != "Todas as Disciplinas":
+    elif disc not in ["Todas", "Todos", "Todas as Disciplinas"]:
         fdf = fdf[fdf["DS_DISCIPLINA"] == disc]
-    if uf != "Brasil (Todos)":
+        
+    if uf and uf not in ["Brasil (Todos)", "Brasil", "Todos"]:
         fdf = fdf[fdf["NM_UF"] == uf]
-    if rede != "Todas":
+        
+    if rede and rede not in ["Todas", "Todas as Redes"]:
         fdf = fdf[fdf["TP_REDE"] == rede]
+        
     return fdf
 
 @app.get("/")
