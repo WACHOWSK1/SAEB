@@ -28,7 +28,9 @@ WHERE IN_SITUACAO_CENSO = 1
   AND PESO > 0
 ```
 
-> **Precisão conceitual sobre o universo:** A consistência com o Censo Escolar (`IN_SITUACAO_CENSO = 1`) não transforma o recorte, que inclui a rede privada com desenho amostral, em uma população integralmente censitária. Por isso, a denominação metodologicamente correta é **conjunto de estudantes elegíveis para a análise ponderada**.
+> **Precisão conceitual sobre o universo e indicadores:**
+> 1. A consistência com o Censo Escolar (`IN_SITUACAO_CENSO = 1`) não transforma o recorte, que inclui a rede privada com desenho amostral, em uma população integralmente censitária. Por isso, a denominação metodologicamente correta é **conjunto de estudantes elegíveis para a análise ponderada**.
+> 2. O campo `IN_PROFICIENCIA_LP` e `IN_PROFICIENCIA_MT` é o **indicador disponibilizado pelo Inep** no dicionário dos microdados para atestar que o estudante respondeu a pelo menos três itens no caderno conjunto de Língua Portuguesa e Matemática, qualificando o caderno como válido para inclusão nas análises de proficiência e peso amostral.
 
 ### Síntese dos Totais e Acertos (Observados vs. Ponderados)
 
@@ -50,8 +52,12 @@ Com o rebaixamento artificial corrigido, a distribuição real dos descritores s
 
 ### Análise do Limiar Anterior (Corte em 50%)
 Se mantivéssemos o corte rígido em $50\%$ após a correção dos microdados:
-- Apenas **24 descritores** da Matriz de 2001 ficariam abaixo de 50% (7 de LP e 17 de MT).
-- Habilidades com acerto médio entre 50% e 60% — em que uma proporção expressiva de respostas aos itens ainda é incorreta (ex.: D1 de LP com 57,7%, D4 de LP com 56,8%, D14 de LP com 49,4%) — seriam desconsideradas de intervenções prioritárias, gerando uma falsa sensação de suficiência pedagógica.
+- Apenas **24 descritores** da Matriz de 2001 ficariam abaixo de 50%, sendo **2 de Língua Portuguesa** (D7 com 48,35% e D14 com 49,44%) e **22 de Matemática**.
+- Exemplos de percentuais ponderados em Língua Portuguesa evidenciam a importância dessa escolha:
+  - **D1 (LP):** **62,37%** (faixa Intermediário, acima de 60%);
+  - **D4 (LP):** **59,38%** (faixa Atenção, pertencente ao intervalo de 50% a 60%);
+  - **D14 (LP):** **49,44%** (faixa Atenção, abaixo de 50%).
+  - *Nota:* Somente **D4** pertence ao intervalo de 50% a 60% entre esses três exemplos (ao lado de outros descritores de LP como D6 com 59,90%, D15 com 56,72%, D3 com 56,69% e D9 com 56,53%). Manter o corte em 50% descartaria sumariamente habilidades com forte demanda de intervenção pedagógica como D4 e D6.
 
 ### Justificativa Pedagógica e Metodológica do Limiar 60%
 A recomendação de elevar a faixa de **Atenção** para $[40\%, 60\%[$ e o corte de prioridade para $< 60\%$ é plenamente justificada:
@@ -59,9 +65,9 @@ A recomendação de elevar a faixa de **Atenção** para $[40\%, 60\%[$ e o cort
 2. **Abrangência Adequada para a Pesquisa:** O limiar $< 60\%$ seleciona exatamente **41 descritores na Matriz de 2001** (11 Críticos + 30 em Atenção: 12 de Língua Portuguesa e 29 de Matemática) e **52 códigos na base completa** (16 Críticos + 36 em Atenção).
 3. **Equilíbrio entre Componentes:** Preserva uma cesta robusta e representativa tanto em Língua Portuguesa quanto em Matemática, sem esvaziar o objeto de análise da dissertação.
 
-### Distribuição Oficial das Faixas (Limiares 40 / 60 / 70)
+### Distribuição segundo os critérios definidos para a pesquisa (Limiares 40 / 60 / 70)
 
-| Faixa de Desempenho | Critério | Matriz 2001 (56 descritores) | Base Completa (68 habilidades) |
+| Faixa de Desempenho | Critério da Pesquisa | Matriz 2001 (56 descritores) | Base Completa (68 habilidades) |
 |---|---|---|---|
 | **Crítico** | $< 40,0\%$ | **11** | **16** |
 | **Atenção** | $40,0\% \le p < 60,0\%$ | **30** | **36** |
