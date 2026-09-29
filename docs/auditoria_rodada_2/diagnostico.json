@@ -1,0 +1,417 @@
+{
+  "executado_em_utc": "2026-09-29T16:51:55.471257+00:00",
+  "duckdb": "1.5.6",
+  "alunos": {
+    "nome": "TS_ALUNO_9EF.csv",
+    "bytes": 1114818261,
+    "sha256": "c815df7731f2b538ba74eca6f644a7c4cfa4dbe566aa35365e7c5d1c9af13062"
+  },
+  "itens": {
+    "nome": "TS_ITEM.csv",
+    "bytes": 81903,
+    "sha256": "8266fd297ae12664449e126b592f0b006a19d64d5880637bfd83e0b950a9c805"
+  },
+  "leitura": "estrita, sem ignore_errors; CSV completo, projeção de colunas relevantes",
+  "diagnosticos": {
+    "totais": [
+      {
+        "registros": 2502907,
+        "ids_distintos": 2502907,
+        "censo_1": 2489289,
+        "censo_0": 13618,
+        "etapa_edicao_divergentes": 0,
+        "pesos_lp_mt_diferentes": 0,
+        "presenca_lp_mt_diferente": 0,
+        "proficiencia_lp_mt_diferente": 0
+      }
+    ],
+    "participacao_LP": [
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 0,
+        "preenchimento": 0,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 9006
+      },
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 1,
+        "preenchimento": 0,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 69
+      },
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 1,
+        "preenchimento": 0,
+        "caderno_valido": 1,
+        "situacao_peso": "ausente",
+        "estudantes": 2
+      },
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 1
+      },
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 1,
+        "situacao_peso": "ausente",
+        "estudantes": 4540
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 0,
+        "preenchimento": 0,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 400618
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 0,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 5231
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 0,
+        "caderno_valido": 1,
+        "situacao_peso": "positivo",
+        "estudantes": 648
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 78
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 1,
+        "situacao_peso": "ausente",
+        "estudantes": 144
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 1,
+        "situacao_peso": "positivo",
+        "estudantes": 2082570
+      }
+    ],
+    "pesos_LP": [
+      {
+        "censo_1": 2489289,
+        "peso_ausente": 406071,
+        "peso_positivo": 2083218,
+        "peso_nao_positivo": 0,
+        "ausentes": 400618,
+        "presentes": 2088671,
+        "cadernos_validos": 2083362,
+        "peso_positivo_sem_presenca": 0,
+        "peso_positivo_sem_caderno_valido": 0,
+        "elegiveis_ponderado": 2083218,
+        "peso_minimo": 0.0265805091,
+        "peso_maximo": 203.48009165
+      }
+    ],
+    "vetor_LP_1": [
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "comprimento": 13,
+        "estudantes": 13618,
+        "caracteres_fora_dicionario": 0
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "comprimento": 13,
+        "estudantes": 2489289,
+        "caracteres_fora_dicionario": 0
+      }
+    ],
+    "blocos_LP_1": [
+      {
+        "bloco": 1,
+        "estudantes": 360763
+      },
+      {
+        "bloco": 2,
+        "estudantes": 354772
+      },
+      {
+        "bloco": 3,
+        "estudantes": 354763
+      },
+      {
+        "bloco": 4,
+        "estudantes": 354764
+      },
+      {
+        "bloco": 5,
+        "estudantes": 354699
+      },
+      {
+        "bloco": 6,
+        "estudantes": 354767
+      },
+      {
+        "bloco": 7,
+        "estudantes": 354761
+      }
+    ],
+    "vetor_LP_2": [
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "comprimento": 13,
+        "estudantes": 13618,
+        "caracteres_fora_dicionario": 0
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "comprimento": 13,
+        "estudantes": 2489289,
+        "caracteres_fora_dicionario": 0
+      }
+    ],
+    "blocos_LP_2": [
+      {
+        "bloco": 1,
+        "estudantes": 354758
+      },
+      {
+        "bloco": 2,
+        "estudantes": 360710
+      },
+      {
+        "bloco": 3,
+        "estudantes": 354897
+      },
+      {
+        "bloco": 4,
+        "estudantes": 354753
+      },
+      {
+        "bloco": 5,
+        "estudantes": 354680
+      },
+      {
+        "bloco": 6,
+        "estudantes": 354722
+      },
+      {
+        "bloco": 7,
+        "estudantes": 354769
+      }
+    ],
+    "participacao_MT": [
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 0,
+        "preenchimento": 0,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 9006
+      },
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 1,
+        "preenchimento": 0,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 69
+      },
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 1,
+        "preenchimento": 0,
+        "caderno_valido": 1,
+        "situacao_peso": "ausente",
+        "estudantes": 5
+      },
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 1
+      },
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 1,
+        "situacao_peso": "ausente",
+        "estudantes": 4537
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 0,
+        "preenchimento": 0,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 400618
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 0,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 5227
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 0,
+        "caderno_valido": 1,
+        "situacao_peso": "positivo",
+        "estudantes": 864
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 0,
+        "situacao_peso": "ausente",
+        "estudantes": 82
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 1,
+        "situacao_peso": "ausente",
+        "estudantes": 144
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "presenca": 1,
+        "preenchimento": 1,
+        "caderno_valido": 1,
+        "situacao_peso": "positivo",
+        "estudantes": 2082354
+      }
+    ],
+    "pesos_MT": [
+      {
+        "censo_1": 2489289,
+        "peso_ausente": 406071,
+        "peso_positivo": 2083218,
+        "peso_nao_positivo": 0,
+        "ausentes": 400618,
+        "presentes": 2088671,
+        "cadernos_validos": 2083362,
+        "peso_positivo_sem_presenca": 0,
+        "peso_positivo_sem_caderno_valido": 0,
+        "elegiveis_ponderado": 2083218,
+        "peso_minimo": 0.0265805091,
+        "peso_maximo": 203.48009165
+      }
+    ],
+    "vetor_MT_1": [
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "comprimento": 13,
+        "estudantes": 13618,
+        "caracteres_fora_dicionario": 0
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "comprimento": 13,
+        "estudantes": 2489289,
+        "caracteres_fora_dicionario": 0
+      }
+    ],
+    "blocos_MT_1": [
+      {
+        "bloco": 1,
+        "estudantes": 360763
+      },
+      {
+        "bloco": 2,
+        "estudantes": 354772
+      },
+      {
+        "bloco": 3,
+        "estudantes": 354763
+      },
+      {
+        "bloco": 4,
+        "estudantes": 354764
+      },
+      {
+        "bloco": 5,
+        "estudantes": 354699
+      },
+      {
+        "bloco": 6,
+        "estudantes": 354767
+      },
+      {
+        "bloco": 7,
+        "estudantes": 354761
+      }
+    ],
+    "vetor_MT_2": [
+      {
+        "IN_SITUACAO_CENSO": 0,
+        "comprimento": 13,
+        "estudantes": 13618,
+        "caracteres_fora_dicionario": 0
+      },
+      {
+        "IN_SITUACAO_CENSO": 1,
+        "comprimento": 13,
+        "estudantes": 2489289,
+        "caracteres_fora_dicionario": 0
+      }
+    ],
+    "blocos_MT_2": [
+      {
+        "bloco": 1,
+        "estudantes": 354758
+      },
+      {
+        "bloco": 2,
+        "estudantes": 360710
+      },
+      {
+        "bloco": 3,
+        "estudantes": 354897
+      },
+      {
+        "bloco": 4,
+        "estudantes": 354753
+      },
+      {
+        "bloco": 5,
+        "estudantes": 354680
+      },
+      {
+        "bloco": 6,
+        "estudantes": 354722
+      },
+      {
+        "bloco": 7,
+        "estudantes": 354769
+      }
+    ]
+  }
+}

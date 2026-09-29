@@ -1,0 +1,87 @@
+{
+  "integridade": {
+    "blocos_censo": 9957156,
+    "vetores_invalidos": 0,
+    "caracteres_invalidos": 0,
+    "blocos_sem_itens": 0
+  },
+  "diferencas_maximas_reproducao": {
+    "TOTAL_RESPOSTAS": 0.0,
+    "TOTAL_ACERTOS": 0.0,
+    "PESO_TOTAL_RESPOSTAS": 5.494803190231323e-08,
+    "PESO_TOTAL_ACERTOS": 6.51925802230835e-09
+  },
+  "baseline_sha256": "7410099ca267b7f3e3674815b133fdf28ee0c4bd04409e23b5d1e386cfb1b6e9",
+  "faixas": [
+    {
+      "recorte": "Todos os 68 códigos",
+      "versao": "antiga",
+      "Crítico": 23,
+      "Atenção": 26,
+      "Intermediário": 19,
+      "Adequado": 0
+    },
+    {
+      "recorte": "Todos os 68 códigos",
+      "versao": "nova",
+      "Crítico": 16,
+      "Atenção": 17,
+      "Intermediário": 33,
+      "Adequado": 2
+    },
+    {
+      "recorte": "56 descritores D",
+      "versao": "antiga",
+      "Crítico": 16,
+      "Atenção": 22,
+      "Intermediário": 18,
+      "Adequado": 0
+    },
+    {
+      "recorte": "56 descritores D",
+      "versao": "nova",
+      "Crítico": 11,
+      "Atenção": 13,
+      "Intermediário": 30,
+      "Adequado": 2
+    },
+    {
+      "recorte": "12 códigos adicionais",
+      "versao": "antiga",
+      "Crítico": 7,
+      "Atenção": 4,
+      "Intermediário": 1,
+      "Adequado": 0
+    },
+    {
+      "recorte": "12 códigos adicionais",
+      "versao": "nova",
+      "Crítico": 5,
+      "Atenção": 4,
+      "Intermediário": 3,
+      "Adequado": 0
+    }
+  ],
+  "totais": [
+    {
+      "antigo_respostas": 129443028.0,
+      "antigo_acertos": 56153348.0,
+      "antigo_peso_respostas": 162225596.5914522,
+      "antigo_peso_acertos": 75981181.44216667,
+      "novo_respostas": 108327336.0,
+      "novo_acertos": 56149996.0,
+      "novo_peso_respostas": 141109904.5914522,
+      "novo_peso_acertos": 75977829.44216667,
+      "todos_validos_respostas": 108334824.0,
+      "todos_validos_acertos": 56153275.0,
+      "novos_brancos": 271289.0,
+      "novos_nulos": 124214.0,
+      "novos_espacos": 0.0
+    }
+  ],
+  "selecao_nova": 33,
+  "selecao_nova_matriz_2001": 24,
+  "saem_da_selecao": 16,
+  "mudam_de_faixa": 25,
+  "itens_uf_rede_exportados": 9828
+}

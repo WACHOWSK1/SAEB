@@ -1,10 +1,21 @@
 # Dashboard de Descritores do SAEB 📊
 
-## Site estático — revisão dos cálculos de 29/09/2026
+## Site estático — revisão e auditoria dos microdados (29/09/2026)
 
-O site Next.js em `frontend/` usa os somatórios reais de `data/processed/saeb_descritores.csv`, com recorte de 2023, 9º ano EF, LP e Matemática. O arquivo publicado é `frontend/public/data/saeb-2023-9ef.json`. As telas utilizam a mesma fonte estática; não dependem da API Python nem da variável `NEXT_PUBLIC_API_URL`.
+O site Next.js em `frontend/` utiliza os somatórios recalculados e auditados a partir dos microdados oficiais do **SAEB 2023 (9º ano EF, Língua Portuguesa e Matemática)**.
 
-Consulte [a revisão e seus limites](docs/REVISAO_SAEB_2023.md) antes de utilizar os resultados na pesquisa. A conferência do agregado **não substitui o reprocessamento dos microdados originais**. O ETL, a API Python e o Streamlit abaixo são componentes anteriores; não foram validados integralmente nesta revisão.
+### Resultados da Auditoria dos Microdados (Rodada 2):
+- **População censitária válida**: 2.083.218 estudantes (`IN_SITUACAO_CENSO = 1`, `IN_PRESENCA = 1`, `IN_PROFICIENCIA = 1`, `PESO > 0`).
+- **Respostas a itens avaliadas**: 108.327.336 respostas (eliminando 21.115.692 pesos artificiais de 400.618 estudantes ausentes imputados indevidamente no processamento anterior).
+- **Taxa média ponderada nacional**: **53,84%** (simples: 51,83%).
+- **Critério de prioridade pedagógica (40 / 60 / 70)**:
+  - **Crítico**: $< 40\%$ (11 descritores na Matriz 2001 | 16 na base completa)
+  - **Atenção**: $40\% \le p < 60\%$ (30 descritores na Matriz 2001 | 36 na base completa)
+  - **Intermediário**: $60\% \le p < 70\%$ (13 descritores na Matriz 2001 | 14 na base completa)
+  - **Adequado**: $\ge 70\%$ (2 descritores na Matriz 2001: D5 e D12 de LP)
+  - **Prioritários para intervenção pedagógica ($< 60\%$)**: **41 descritores** da Matriz 2001 (12 LP, 29 MT) e **52 habilidades** no total.
+
+Consulte os relatórios completos e evidências em [docs/auditoria_rodada_2/](docs/auditoria_rodada_2/) e [docs/REVISAO_SAEB_2023.md](docs/REVISAO_SAEB_2023.md).
 
 ```bash
 python scripts/export_static_data.py

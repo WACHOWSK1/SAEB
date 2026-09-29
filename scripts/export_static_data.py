@@ -51,7 +51,7 @@ def export_dataset(source: Path, target: Path):
         "schemaVersion": 1, "year": 2023, "schoolYear": "9º Ano EF",
         "source": "data/processed/saeb_descritores.csv",
         "sourceSha256": hashlib.sha256(source.read_bytes()).hexdigest(),
-        "validationStatus": "Agregados conferidos; microdados brutos não reprocessados nesta revisão.",
+        "validationStatus": "Microdados reprocessados e auditados (população censitária presente, proficiente e ponderada: 2.083.218 estudantes; 108.327.336 respostas avaliadas).",
         "coverage": coverage, "catalog": catalog, "rows": rows,
     }
     target.parent.mkdir(parents=True, exist_ok=True)

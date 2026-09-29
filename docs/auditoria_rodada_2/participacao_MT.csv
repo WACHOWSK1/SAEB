@@ -1,0 +1,12 @@
+﻿IN_SITUACAO_CENSO;presenca;preenchimento;caderno_valido;situacao_peso;estudantes
+0;0;0;0;ausente;9006
+0;1;0;0;ausente;69
+0;1;0;1;ausente;5
+0;1;1;0;ausente;1
+0;1;1;1;ausente;4537
+1;0;0;0;ausente;400618
+1;1;0;0;ausente;5227
+1;1;0;1;positivo;864
+1;1;1;0;ausente;82
+1;1;1;1;ausente;144
+1;1;1;1;positivo;2082354

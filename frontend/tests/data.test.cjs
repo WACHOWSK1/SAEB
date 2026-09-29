@@ -19,29 +19,29 @@ test('a publicação identifica exatamente o CSV de origem', () => {
 test('contagens de faixa e cobertura nacional, sem excluir os códigos adicionais', () => {
   const counts = items => ['critico','atencao','intermediario','adequado'].map(level => items.filter(item => item.faixa === level).length);
   assert.equal(national.descritores.length, 68);
-  assert.deepEqual(counts(national.descritores), [23,26,19,0]);
-  assert.deepEqual(counts(national.descritores.filter(item => item.matriz2001)), [16,22,18,0]);
-  assert.deepEqual(counts(national.descritores.filter(item => !item.matriz2001)), [7,4,1,0]);
+  assert.deepEqual(counts(national.descritores), [16,36,14,2]);
+  assert.deepEqual(counts(national.descritores.filter(item => item.matriz2001)), [11,30,13,2]);
+  assert.deepEqual(counts(national.descritores.filter(item => !item.matriz2001)), [5,6,1,0]);
   assert.deepEqual(data.coverage['Matemática'].missing, ['D30','D32']);
   assert.equal(national.kpis.totalEstudantes, null);
-  assert.equal(national.kpis.totalRespostas, 129443028);
+  assert.equal(national.kpis.totalRespostas, 108327336);
   assert.equal(national.kpis.totalUFs, 27);
 });
 
 test('D14 de LP mantém acertos observados ao alternar a métrica', () => {
   for (const metric of ['ponderado','simples']) {
     const d14 = summarize(data.rows, data.catalog, metric).descritores.find(item => item.DS_DISCIPLINA === 'Língua Portuguesa' && item.CO_DESCRITOR === 'D14');
-    assert.equal(d14.TOTAL_RESPOSTAS, 3553706);
-    assert.equal(d14.TOTAL_ACERTOS, 1428839);
-    approx(d14.pct, metric === 'ponderado' ? 43.012351759051164 : 40.20701206008601);
+    assert.equal(d14.TOTAL_RESPOSTAS, 2974143);
+    assert.equal(d14.TOTAL_ACERTOS, 1428768);
+    approx(d14.pct, metric === 'ponderado' ? 49.44453943380041 : 48.039653775894436);
   }
 });
 
 test('limiares usam os valores sem arredondamento, incluindo os limites exatos', () => {
-  assert.deepEqual([39.9999,40,49.9999,50,69.9999,70].map(value => classifyPerformance(value).faixa), ['critico','atencao','atencao','intermediario','intermediario','adequado']);
+  assert.deepEqual([39.9999,40,59.9999,60,69.9999,70].map(value => classifyPerformance(value).faixa), ['critico','atencao','atencao','intermediario','intermediario','adequado']);
   assert.equal(validThresholds({criticoMax:40,atencaoMax:40,intermediarioMax:70}), false);
-  assert.equal(validThresholds({criticoMax:40,atencaoMax:50,intermediarioMax:101}), false);
-  assert.equal(validThresholds({criticoMax:40,atencaoMax:50,intermediarioMax:70}), true);
+  assert.equal(validThresholds({criticoMax:40,atencaoMax:60,intermediarioMax:101}), false);
+  assert.equal(validThresholds({criticoMax:40,atencaoMax:60,intermediarioMax:70}), true);
 });
 
 test('percentuais ponderados agregam os pesos, não as contagens brutas', () => {
@@ -63,7 +63,7 @@ test('eixos distinguem códigos iguais de componentes diferentes e preservam zer
   assert.equal(axisRate(items, 'Língua Portuguesa', ['D1'], 'ponderado'), 90);
   assert.equal(axisRate(items, 'Matemática', ['D1'], 'ponderado'), 0);
   assert.equal(axisRate(items, 'Matemática', ['D2'], 'ponderado'), null);
-  const expected = [50.21098745334591,56.45253460684858,40.241405121832564,43.48586235821735,48.66343651005755];
+  const expected = [57.719279869696784, 64.90459985182353, 46.26153922373489, 49.99088011429004, 55.942984604020445];
   GLOBAL_AXES.forEach((axis,i) => approx(axisRate(national.descritores, axis.disc, axis.codes, 'ponderado'), expected[i]));
 });
 
@@ -82,9 +82,9 @@ test('as três consultas da interface utilizam os mesmos somatórios publicados'
   global.fetch = async url => { assert.equal(url, '/data/saeb-2023-9ef.json'); calls++; return {ok:true,json:async () => data}; };
   const api = require('../.test-build/services/api.js');
   const result = await api.fetchSaebDescritores(filters);
-  approx(result.kpis.mediaGeral,46.83674034099347);
+  approx(result.kpis.mediaGeral,53.84301666289195);
   const simple = await api.fetchSaebDescritores({...filters,metrica:'simples'});
-  approx(simple.kpis.mediaGeral,43.38074353452239);
+  approx(simple.kpis.mediaGeral,51.833635048497825);
   const states = await api.fetchSaebUfs({...filters,rede:'Privada',componente:'Matemática'});
   const parana = states.ufs.find(row => row.NM_UF === 'Paraná');
   approx(parana.pct,rate(filterRows(data.rows,{...filters,rede:'Privada',componente:'Matemática',uf:'Paraná'}),'ponderado'));

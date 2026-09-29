@@ -10,13 +10,13 @@ export type PerformanceLevel = 'critico' | 'atencao' | 'intermediario' | 'adequa
 
 export interface PerformanceThresholds {
   criticoMax: number;      // e.g. < 40.0%
-  atencaoMax: number;      // e.g. 40.0% - 50.0%
-  intermediarioMax: number; // e.g. 50.0% - 70.0%
+  atencaoMax: number;      // e.g. 40.0% - 60.0%
+  intermediarioMax: number; // e.g. 60.0% - 70.0%
 }
 
 export const DEFAULT_THRESHOLDS: PerformanceThresholds = {
   criticoMax: 40.0,
-  atencaoMax: 50.0,
+  atencaoMax: 60.0,
   intermediarioMax: 70.0,
 };
 

@@ -75,8 +75,8 @@ export default function MetodologiaPage() {
             </section>
             <section>
               <h3 className="font-bold text-[#202124]">4. Critério de atenção pedagógica</h3>
-              <p>As faixas são critérios definidos para este painel e para o recorte da pesquisa. Não são níveis oficiais de proficiência do Inep. Na configuração padrão: Crítico, abaixo de 40%; Atenção, de 40% até menos de 50%; Intermediário, de 50% até menos de 70%; Adequado, a partir de 70%.</p>
-              <p>A seleção de Crítico e Atenção corresponde, portanto, a percentuais inferiores a 50%. Registre também a métrica, o componente, a rede, o território, a data da consulta e se foram considerados todos os códigos ou apenas aqueles da matriz de 2001. Os resultados de um recorte não devem ser transferidos automaticamente para outro.</p>
+              <p>As faixas são critérios definidos para este painel e para o recorte da pesquisa. Não são níveis oficiais de proficiência do Inep. Na configuração padrão: Crítico, abaixo de 40%; Atenção, de 40% até menos de 60%; Intermediário, de 60% até menos de 70%; Adequado, a partir de 70%.</p>
+              <p>A seleção de prioridade pedagógica (Crítico e Atenção) corresponde, portanto, a percentuais inferiores a 60%. Registre também a métrica, o componente, a rede, o território, a data da consulta e se foram considerados todos os códigos ou apenas aqueles da matriz de 2001. Os resultados de um recorte não devem ser transferidos automaticamente para outro.</p>
             </section>
           </div>
         </Card>

@@ -1,0 +1,74 @@
+{
+  "limites_autorais": {
+    "Crítico": "p<40",
+    "Atenção": "40≤p<60",
+    "Intermediário": "60≤p<70",
+    "Adequado": "p≥70"
+  },
+  "faixas": [
+    {
+      "recorte": "Todos os 68 códigos",
+      "versao": "Processamento anterior",
+      "Crítico": 23,
+      "Atenção": 42,
+      "Intermediário": 3,
+      "Adequado": 0
+    },
+    {
+      "recorte": "Todos os 68 códigos",
+      "versao": "Recálculo auditado",
+      "Crítico": 16,
+      "Atenção": 36,
+      "Intermediário": 14,
+      "Adequado": 2
+    },
+    {
+      "recorte": "56 descritores D",
+      "versao": "Processamento anterior",
+      "Crítico": 16,
+      "Atenção": 37,
+      "Intermediário": 3,
+      "Adequado": 0
+    },
+    {
+      "recorte": "56 descritores D",
+      "versao": "Recálculo auditado",
+      "Crítico": 11,
+      "Atenção": 30,
+      "Intermediário": 13,
+      "Adequado": 2
+    },
+    {
+      "recorte": "12 códigos adicionais",
+      "versao": "Processamento anterior",
+      "Crítico": 7,
+      "Atenção": 5,
+      "Intermediário": 0,
+      "Adequado": 0
+    },
+    {
+      "recorte": "12 códigos adicionais",
+      "versao": "Recálculo auditado",
+      "Crítico": 5,
+      "Atenção": 6,
+      "Intermediário": 1,
+      "Adequado": 0
+    }
+  ],
+  "matriz_2001": {
+    "universo_descritores_com_itens": 56,
+    "priorizados": 41,
+    "LP": 12,
+    "MT": 29
+  },
+  "base_completa": {
+    "universo_codigos": 68,
+    "priorizados": 52,
+    "LP": 15,
+    "MT": 37
+  },
+  "sensibilidade_50_corrigido": {
+    "matriz_2001": 24,
+    "base_completa": 33
+  }
+}
