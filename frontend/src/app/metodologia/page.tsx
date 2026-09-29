@@ -37,30 +37,31 @@ export default function MetodologiaPage() {
           <h2 className="text-xl font-extrabold mb-3">Nota técnica: diagnóstico descritivo do SAEB 2023</h2>
           <div className="text-sm text-[#5F6368] space-y-5 leading-relaxed">
             <p>O painel apresenta percentuais de acerto em itens de Língua Portuguesa e Matemática do 9º ano do Ensino Fundamental, por código, UF e rede. O percentual de acerto é um indicador descritivo do conjunto de respostas selecionado. Não equivale à proficiência calculada pelo Inep nem mede, isoladamente, o domínio de uma habilidade.</p>
-            <Alert type="info" showIcon title="Alcance da conferência dos dados"
-              description="Os cálculos desta versão foram conferidos a partir do arquivo agregado do projeto. A revisão não reprocessou os arquivos originais de estudantes e itens. A validação da extração original, dos pesos e da origem dos códigos adicionais permanece necessária." />
+            <Alert type="success" showIcon title="Reprocessamento e auditoria dos microdados"
+              description="Os dados desta versão foram reprocessados e auditados ponta a ponta a partir dos microdados oficiais do Inep (TS_ALUNO_9EF.csv e TS_ITEM.csv). Foram excluídos 406.071 registros sem peso amostral válido (incluindo 400.618 ausentes e 5.453 outros registros sem peso positivo ou sem proficiência apurada), eliminando a distorção anterior de imputação de peso." />
             <section>
-              <h3 className="font-bold text-[#202124]">1. Recorte e fonte</h3>
-              <p>A base publicada reúne registros de 2023, do 9º ano EF, com filtros de componente, UF e rede pública ou privada. Município, escola, turma e localização urbana/rural não estão disponíveis neste agregado. Os filtros utilizam os somatórios observados de cada recorte.</p>
-              <p><a href="/data/saeb-2023-9ef.json" download className="underline">Baixar os dados agregados e os metadados de conferência</a>. O arquivo contém a identificação da fonte, seu hash SHA-256 e a cobertura de códigos.</p>
+              <h3 className="font-bold text-[#202124]">1. Recorte e conjunto de estudantes elegíveis</h3>
+              <p>O universo analisado compreende o <strong>conjunto de estudantes elegíveis para a análise ponderada</strong> do 9º ano do Ensino Fundamental no SAEB 2023, sob os critérios de validação do Inep: <code>IN_SITUACAO_CENSO = 1</code>, presença no teste do componente (<code>IN_PRESENCA = 1</code>), proficiência apurada (<code>IN_PROFICIENCIA = 1</code>) e peso amostral estritamente positivo (<code>PESO &gt; 0</code>), totalizando 2.083.218 estudantes. A consistência com o Censo Escolar não transforma o recorte, que inclui a rede privada (de delineamento amostral), em uma população integralmente censitária.</p>
+              <p>A base reúne agregações por componente (Língua Portuguesa e Matemática), UF e rede de ensino (Pública ou Privada). Município, escola, turma e localização urbana/rural não estão abertos neste agregado.</p>
+              <p><a href="/data/saeb-2023-9ef.json" download className="underline">Baixar os dados agregados e os metadados de conferência</a>. O arquivo contém a identificação da fonte, seu hash SHA-256 e a cobertura completa de códigos.</p>
             </section>
             <section>
               <h3 className="font-bold text-[#202124]">2. Respostas, acertos e pesos</h3>
-              <p>A unidade contada é a resposta computada a um item. Um estudante pode contribuir com várias respostas ao mesmo descritor. Por isso, o total de respostas não representa estudantes únicos, e sua divisão por 26 ou 52 não fornece uma contagem validada de participantes.</p>
-              <p>Na organização por blocos incompletos balanceados (BIB), os estudantes respondem a diferentes conjuntos de itens. No agregado completo utilizado pelo painel há 129.443.028 respostas computadas; essa contagem depende dos critérios empregados na extração original.</p>
+              <p>A unidade fundamental contabilizada é a resposta computada a um item do caderno de prova. Como os cadernos são estruturados pelo delineamento de blocos incompletos balanceados (BIB), cada estudante responde a uma amostra de itens do banco, podendo responder a múltiplos itens associados ao mesmo descritor. Por isso, a contagem de respostas não representa estudantes únicos.</p>
+              <p>Após o reprocessamento dos microdados com o descarte dos 406.071 registros sem peso, o agregado totaliza <strong>108.327.336 respostas a itens computadas</strong> (foram retiradas 21.115.692 respostas espúrias e 3.352 acertos observados da versão anterior não filtrada).</p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="p-4 bg-[#FAFAFA] rounded-xl border">
-                  <strong>Métrica simples</strong>
-                  <p>100 × total de acertos / total de respostas computadas.</p>
-                  <p>Descreve as observações contabilizadas na base sem aplicar os pesos amostrais.</p>
+                  <strong>Métrica simples (Acertos Observados)</strong>
+                  <p>100 × total de acertos observados / total de respostas computadas.</p>
+                  <p>No agregado nacional, são <strong>56.149.996 acertos observados</strong> sobre 108.327.336 respostas, resultando em uma taxa simples de <strong>51,83%</strong>.</p>
                 </div>
                 <div className="p-4 bg-[#FAFAFA] rounded-xl border">
-                  <strong>Métrica ponderada</strong>
+                  <strong>Métrica ponderada (Soma dos Pesos)</strong>
                   <p>100 × soma dos pesos das respostas corretas / soma dos pesos das respostas computadas.</p>
-                  <p>Utiliza os campos de pesos presentes no agregado. A razão entre totais ponderados não deve ser descrita automaticamente como uma estimativa não viesada. Sua interpretação depende do plano amostral e dos critérios de inclusão.</p>
+                  <p>A soma ponderada dos acertos é de aproximadamente <strong>75.977.829,44</strong> sobre uma soma ponderada de respostas de <strong>141.109.904,59</strong>, resultando na taxa média ponderada de <strong>53,84%</strong>.</p>
                 </div>
               </div>
-              <p>Os totais de respostas e acertos exibidos são contagens observadas e permanecem iguais ao alternar a métrica. A classificação usa o percentual antes do arredondamento; a tela apresenta uma casa decimal.</p>
+              <p><strong>Atenção à interpretação pedagógica:</strong> O indicador considera respostas a itens, com ponderação. Ele mede a proporção de acertos nos itens associados a cada descritor e <em>não mede diretamente quantos estudantes dominam ou deixam de dominar a habilidade</em> (o que exigiria modelos psicométricos de Teoria de Resposta ao Item com definição de pontos de corte na escala de proficiência contínua).</p>
             </section>
             <section>
               <h3 className="font-bold text-[#202124]">3. Matriz de referência e códigos da base</h3>

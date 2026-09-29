@@ -5,9 +5,10 @@
 O site Next.js em `frontend/` utiliza os somatórios recalculados e auditados a partir dos microdados oficiais do **SAEB 2023 (9º ano EF, Língua Portuguesa e Matemática)**.
 
 ### Resultados da Auditoria dos Microdados (Rodada 2):
-- **População censitária válida**: 2.083.218 estudantes (`IN_SITUACAO_CENSO = 1`, `IN_PRESENCA = 1`, `IN_PROFICIENCIA = 1`, `PESO > 0`).
-- **Respostas a itens avaliadas**: 108.327.336 respostas (eliminando 21.115.692 pesos artificiais de 400.618 estudantes ausentes imputados indevidamente no processamento anterior).
-- **Taxa média ponderada nacional**: **53,84%** (simples: 51,83%).
+- **Conjunto de estudantes elegíveis para a análise ponderada**: 2.083.218 estudantes (`IN_SITUACAO_CENSO = 1`, `IN_PRESENCA = 1`, `IN_PROFICIENCIA = 1`, `PESO > 0`). A consistência com o Censo não transforma o recorte, que inclui rede privada com desenho amostral, em uma população integralmente censitária.
+- **Respostas a itens computadas**: 108.327.336 respostas (eliminando 21.115.692 respostas e 3.352 acertos observados oriundos de 406.071 registros sem peso — sendo 400.618 ausentes e 5.453 outros registros sem peso/proficiência válidos).
+- **Acertos apurados**: 56.149.996 acertos observados; soma ponderada dos acertos de aproximadamente 75.977.829,44 (sobre 141.109.904,59 de respostas ponderadas).
+- **Taxa média ponderada nacional**: **53,84%** (simples: 51,83%). O indicador afere respostas a itens, com ponderação, sem medir diretamente quantos estudantes dominam ou deixam de dominar a habilidade.
 - **Critério de prioridade pedagógica (40 / 60 / 70)**:
   - **Crítico**: $< 40\%$ (11 descritores na Matriz 2001 | 16 na base completa)
   - **Atenção**: $40\% \le p < 60\%$ (30 descritores na Matriz 2001 | 36 na base completa)
@@ -15,7 +16,7 @@ O site Next.js em `frontend/` utiliza os somatórios recalculados e auditados a 
   - **Adequado**: $\ge 70\%$ (2 descritores na Matriz 2001: D5 e D12 de LP)
   - **Prioritários para intervenção pedagógica ($< 60\%$)**: **41 descritores** da Matriz 2001 (12 LP, 29 MT) e **52 habilidades** no total.
 
-Consulte os relatórios completos e evidências em [docs/auditoria_rodada_2/](docs/auditoria_rodada_2/) e [docs/REVISAO_SAEB_2023.md](docs/REVISAO_SAEB_2023.md).
+Consulte os relatórios completos e evidências em [docs/auditoria_rodada_2/](docs/auditoria_rodada_2/) e [docs/RESPOSTA_E_PARECER_AUDITORIA_RODADA_2.md](docs/RESPOSTA_E_PARECER_AUDITORIA_RODADA_2.md).
 
 ```bash
 python scripts/export_static_data.py

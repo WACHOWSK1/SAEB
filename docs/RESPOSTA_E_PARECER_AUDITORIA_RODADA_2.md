@@ -11,15 +11,15 @@ Após exame minucioso do parecer emitido e da reprodução ponta a ponta dos scr
 
 ### A Descoberta Crítica
 Identificou-se a causa raiz exata da distorção anterior que reduzia artificialmente as taxas de acerto do SAEB 2023:
-1. **Inclusão indevida de ausentes no denominador:** No pipeline de processamento original (`process_saeb.py`), a cláusula de junção/agregação não descartava estudantes ausentes (`IN_PRESENCA = 0`, totalizando **400.618 estudantes**).
-2. **Imputação espúria de peso 1.0:** Por terem presença nula, o campo de peso amostral desses alunos era nulo ou vazio no microdado. Uma cláusula `COALESCE(peso, 1.0)` atribuiu a cada um desses 400.618 ausentes o peso artificial de `1.0`.
-3. **Efeito multiplicativo no teste:** Em um teste de 52 itens (26 de LP e 26 de MT), cada estudante ausente gerou 52 linhas de resposta com peso `1.0` e acerto `0.0`. Isso inflacionou o denominador em **21.115.692 respostas fantasmas**, sem qualquer correspondência em acertos no numerador, rebaixando a taxa média nacional de **53,84%** para **46,84%** (uma deflação artificial de ~7 pontos percentuais).
+1. **Inclusão indevida de registros sem peso no denominador:** No pipeline de processamento original (`process_saeb.py`), a cláusula de junção/agregação não descartava registros sem peso amostral válido. Foram contabilizados **406.071 registros sem peso**, correspondendo a **400.618 estudantes ausentes** (`IN_PRESENCA = 0`) mais **5.453 outros registros** sem peso positivo ou sem proficiência apurada.
+2. **Imputação espúria de peso 1.0:** Por terem peso nulo ou vazio, uma cláusula `COALESCE(peso, 1.0)` atribuiu a esses 406.071 registros o peso artificial de `1.0`.
+3. **Efeito multiplicativo no teste:** Em um teste de 52 itens (26 de LP e 26 de MT), esses registros inflacionaram o denominador em **21.115.692 respostas espúrias** e continham **3.352 acertos observados** (portanto, o conjunto excluído não continha apenas zeros). Essa inflação do denominador com acerto quase nulo rebaixou a taxa média nacional ponderada de **53,84%** para **46,84%** (uma deflação artificial de ~7 pontos percentuais).
 
 ---
 
-## 2. Parâmetros e Filtros Censitários Estabelecidos
+## 2. Parâmetros e Filtros para o Conjunto de Estudantes Elegíveis
 
-A auditoria redefiniu e aplicou os filtros metodológicos corretos para o recorte de 9º ano EF censitário do SAEB 2023:
+A auditoria redefiniu e aplicou os filtros metodológicos para a seleção do **conjunto de estudantes elegíveis para a análise ponderada** do 9º ano EF do SAEB 2023:
 
 ```sql
 WHERE IN_SITUACAO_CENSO = 1
@@ -28,15 +28,19 @@ WHERE IN_SITUACAO_CENSO = 1
   AND PESO > 0
 ```
 
-### Síntese da População e Respostas Válidas
+> **Precisão conceitual sobre o universo:** A consistência com o Censo Escolar (`IN_SITUACAO_CENSO = 1`) não transforma o recorte, que inclui a rede privada com desenho amostral, em uma população integralmente censitária. Por isso, a denominação metodologicamente correta é **conjunto de estudantes elegíveis para a análise ponderada**.
 
-| Dimensão | Versão Anterior (Com Falha de Ausentes) | Versão Auditada e Corrigida | Variação / Diagnóstico |
+### Síntese dos Totais e Acertos (Observados vs. Ponderados)
+
+| Dimensão | Versão Anterior (Sem Filtro de Elegibilidade) | Versão Auditada e Corrigida | Variação / Diagnóstico |
 |---|---|---|---|
-| **Estudantes Válidos** | 2.489.289 (incluía ausentes) | **2.083.218** | -406.071 ausentes / sem peso descartados |
-| **Respostas Avaliadas** | 129.443.028 | **108.327.336** | -21.115.692 respostas espúrias eliminadas |
-| **Total de Acertos** | 56.153.348 | **56.149.996** | Quase inalterado (-3.352 resíduos de inconsistência) |
-| **Taxa Média Ponderada** | 46,84% | **53,84%** | +7,00 p.p. (reflexo da eliminação dos ausentes) |
-| **Taxa Média Simples** | 43,38% | **51,83%** | +8,45 p.p. |
+| **Estudantes Elegíveis** | 2.489.289 (incluía ausentes e sem peso) | **2.083.218** | -406.071 registros sem peso descartados |
+| **Respostas a Itens Computadas** | 129.443.028 | **108.327.336** | -21.115.692 respostas espúrias eliminadas |
+| **Contagem de Acertos Observados** | 56.153.348 | **56.149.996** | -3.352 acertos observados no conjunto descartado |
+| **Soma Ponderada de Respostas** | 162.225.596,59 | **141.109.904,59** | Base ponderada oficial do plano amostral |
+| **Soma Ponderada de Acertos** | 75.981.181,44 | **75.977.829,44** | Acertos ponderados legítimos |
+| **Taxa Média Ponderada** | 46,84% | **53,84%** | Razão exata: 75.977.829,44 / 141.109.904,59 |
+| **Taxa Média Simples** | 43,38% | **51,83%** | Razão exata: 56.149.996 / 108.327.336 |
 
 ---
 
@@ -47,11 +51,11 @@ Com o rebaixamento artificial corrigido, a distribuição real dos descritores s
 ### Análise do Limiar Anterior (Corte em 50%)
 Se mantivéssemos o corte rígido em $50\%$ após a correção dos microdados:
 - Apenas **24 descritores** da Matriz de 2001 ficariam abaixo de 50% (7 de LP e 17 de MT).
-- Habilidades com acerto médio entre 50% e 60% — onde **quase metade dos alunos do 9º ano ainda erra o item** (ex.: D1 de LP com 57,7%, D4 de LP com 56,8%, D14 de LP com 49,4%) — seriam desconsideradas de intervenções prioritárias, gerando uma falsa sensação de suficiência pedagógica.
+- Habilidades com acerto médio entre 50% e 60% — em que uma proporção expressiva de respostas aos itens ainda é incorreta (ex.: D1 de LP com 57,7%, D4 de LP com 56,8%, D14 de LP com 49,4%) — seriam desconsideradas de intervenções prioritárias, gerando uma falsa sensação de suficiência pedagógica.
 
 ### Justificativa Pedagógica e Metodológica do Limiar 60%
 A recomendação de elevar a faixa de **Atenção** para $[40\%, 60\%[$ e o corte de prioridade para $< 60\%$ é plenamente justificada:
-1. **Consistência Curricular de Final de Ciclo:** Um percentual de acerto inferior a 60% no 9º ano indica que ao menos 4 em cada 10 estudantes concluem o Ensino Fundamental sem consolidar a habilidade básica avaliada.
+1. **Consistência Curricular de Final de Ciclo:** O indicador considera respostas a itens, com ponderação. Ter menos de 60% de acerto ponderado nos itens associados a uma habilidade indica fragilidade substantiva na etapa de conclusão do Ensino Fundamental. Ressalta-se que o indicador afere respostas a itens e não mede diretamente quantos estudantes individuais dominam ou deixam de dominar a habilidade na perspectiva psicométrica de proficiência latente.
 2. **Abrangência Adequada para a Pesquisa:** O limiar $< 60\%$ seleciona exatamente **41 descritores na Matriz de 2001** (11 Críticos + 30 em Atenção: 12 de Língua Portuguesa e 29 de Matemática) e **52 códigos na base completa** (16 Críticos + 36 em Atenção).
 3. **Equilíbrio entre Componentes:** Preserva uma cesta robusta e representativa tanto em Língua Portuguesa quanto em Matemática, sem esvaziar o objeto de análise da dissertação.
 

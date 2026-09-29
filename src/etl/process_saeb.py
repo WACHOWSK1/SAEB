@@ -106,7 +106,9 @@ def run_etl():
         
         for disc in cfg["discs"]:
             disc_ext = DISCIPLINA_NAMES.get(disc, disc)
-            peso_col = f"PESO_ALUNO_{disc}" if f"PESO_ALUNO_{disc}" in columns else "NULL"
+            peso_col = f"PESO_ALUNO_{disc}" if f"PESO_ALUNO_{disc}" in columns else ("PESO" if "PESO" in columns else None)
+            presenca_col = f"IN_PRESENCA_{disc}" if f"IN_PRESENCA_{disc}" in columns else ("IN_PRESENCA" if "IN_PRESENCA" in columns else None)
+            profic_col = f"IN_PROFICIENCIA_{disc}" if f"IN_PROFICIENCIA_{disc}" in columns else ("IN_PROFICIENCIA" if "IN_PROFICIENCIA" in columns else None)
             
             for bloco_num in [1, 2, 3]:
                 col_bloco_id = f"ID_BLOCO_{bloco_num}_{disc}"
@@ -114,8 +116,27 @@ def run_etl():
                 
                 if col_bloco_id not in columns or col_bloco_tx not in columns:
                     continue
-                    
-                peso_expr = f"COALESCE({peso_col}, 1.0)" if peso_col != "NULL" else "1.0"
+                
+                # Critérios de elegibilidade para a análise ponderada:
+                # 1. Aluno presente na avaliação do componente (IN_PRESENCA = 1)
+                # 2. Aluno com proficiência apurada (IN_PROFICIENCIA = 1)
+                # 3. Aluno com peso amostral válido estritamente positivo (PESO > 0)
+                # Sem imputação de peso artificial (elimina COALESCE(peso, 1.0))
+                filters = ["s.IN_SITUACAO_CENSO = 1", f"s.{col_bloco_id} IS NOT NULL", f"s.{col_bloco_tx} IS NOT NULL"]
+                if presenca_col:
+                    filters.append(f"s.{presenca_col} = 1")
+                if profic_col:
+                    filters.append(f"s.{profic_col} = 1")
+                if peso_col:
+                    filters.append(f"s.{peso_col} IS NOT NULL")
+                    filters.append(f"s.{peso_col} > 0")
+                    peso_resp_sql = f"SUM(s.{peso_col})"
+                    peso_acerto_sql = f"SUM(CASE WHEN SUBSTR(s.{col_bloco_tx}, CAST(item.pos AS INT), 1) = item.gabarito THEN s.{peso_col} ELSE 0.0 END)"
+                else:
+                    peso_resp_sql = "COUNT(*)"
+                    peso_acerto_sql = f"SUM(CASE WHEN SUBSTR(s.{col_bloco_tx}, CAST(item.pos AS INT), 1) = item.gabarito THEN 1 ELSE 0 END)"
+                
+                where_clause = " AND ".join(filters)
                 
                 # Use integer tags instead of UTF-8 literals in SQL to avoid encoding issues
                 query = f"""
@@ -126,17 +147,15 @@ def run_etl():
                     s.ID_UF AS ID_UF,
                     s.IN_PUBLICA AS IN_PUBLICA,
                     COUNT(*) AS TOTAL_RESPOSTAS,
-                    SUM(CASE WHEN contains(item.gabarito, SUBSTR(s.{col_bloco_tx}, CAST(item.pos AS INT), 1)) AND SUBSTR(s.{col_bloco_tx}, CAST(item.pos AS INT), 1) NOT IN ('*', '.', ' ') THEN 1 ELSE 0 END) AS TOTAL_ACERTOS,
-                    SUM({peso_expr}) AS PESO_TOTAL_RESPOSTAS,
-                    SUM(CASE WHEN contains(item.gabarito, SUBSTR(s.{col_bloco_tx}, CAST(item.pos AS INT), 1)) AND SUBSTR(s.{col_bloco_tx}, CAST(item.pos AS INT), 1) NOT IN ('*', '.', ' ') THEN {peso_expr} ELSE 0 END) AS PESO_TOTAL_ACERTOS
+                    SUM(CASE WHEN SUBSTR(s.{col_bloco_tx}, CAST(item.pos AS INT), 1) = item.gabarito THEN 1 ELSE 0 END) AS TOTAL_ACERTOS,
+                    {peso_resp_sql} AS PESO_TOTAL_RESPOSTAS,
+                    {peso_acerto_sql} AS PESO_TOTAL_ACERTOS
                 FROM current_students s
                 JOIN item_lookup item 
                   ON item.serie = {cfg['serie_ts_item']} 
                  AND item.disc = '{disc}' 
                  AND item.bloco = s.{col_bloco_id}
-                WHERE s.IN_SITUACAO_CENSO = 1 
-                  AND s.{col_bloco_id} IS NOT NULL 
-                  AND s.{col_bloco_tx} IS NOT NULL
+                WHERE {where_clause}
                 GROUP BY item.descritor, item.id_item, s.ID_UF, s.IN_PUBLICA
                 """
                 
@@ -148,7 +167,8 @@ def run_etl():
                         df_block["DS_DISCIPLINA"] = disc_ext
                         df_block.drop(columns=["SERIE_TAG"], inplace=True)
                         all_results.append(df_block)
-                except Exception:
+                except Exception as e:
+                    print(f"Erro no bloco {bloco_num} ({disc}): {e}", flush=True)
                     continue
 
         print(f"Concluido {cfg['ano_label']} em {time.time()-t_file:.2f}s!", flush=True)
@@ -172,8 +192,8 @@ def run_etl():
     df_final["NM_UF"] = df_final["ID_UF"].map(lambda x: UF_NAMES.get(int(x) if pd.notnull(x) else 0, f"UF {x}"))
     df_final["TP_REDE"] = df_final["IN_PUBLICA"].map(lambda x: "Pública" if x == 1 else "Privada")
     
-    df_final["PCT_ACERTO"] = (df_final["TOTAL_ACERTOS"] * 100.0 / df_final["TOTAL_RESPOSTAS"]).round(2)
-    df_final["PCT_ACERTO_PONDERADO"] = (df_final["PESO_TOTAL_ACERTOS"] * 100.0 / df_final["PESO_TOTAL_RESPOSTAS"]).round(2)
+    df_final["PCT_ACERTO"] = df_final["TOTAL_ACERTOS"] * 100.0 / df_final["TOTAL_RESPOSTAS"]
+    df_final["PCT_ACERTO_PONDERADO"] = df_final["PESO_TOTAL_ACERTOS"] * 100.0 / df_final["PESO_TOTAL_RESPOSTAS"]
     
     df_final = df_final[[
         "ANO_ESCOLAR", "DS_DISCIPLINA", "CO_DESCRITOR", "ID_ITEM", 
@@ -186,7 +206,7 @@ def run_etl():
     out_csv = os.path.join(DATA_PROC_DIR, "saeb_descritores.csv")
     
     df_final.to_parquet(out_parquet, index=False)
-    df_final.to_csv(out_csv, index=False, sep=';', encoding='utf-8-sig')
+    df_final.to_csv(out_csv, index=False, sep=';', encoding='utf-8-sig', float_format='%.15g')
     
     print(f"\nETL de Alta Performance Finalizado com sucesso em {time.time()-t_start:.2f}s!", flush=True)
     print(f"Total de registros agregados gerados: {len(df_final)}", flush=True)
