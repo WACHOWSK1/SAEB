@@ -1,0 +1,38 @@
+================================================================================
+GERADOR DO PACOTE DE EVID�NCIAS � AUDITORIA SAEB 2023 (9� ANO EF)
+================================================================================
+Data/Hora de Execu�o: 2026-09-29 11:31:39
+Diret�rio de Sa�da: C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTA�O\FUNDAMENTA�O TE�RICA\HABILIDADES SAEB\pacote_evidencias_saeb_2023
+
+[1/6] Identificando arquivos de entrada e calculando hashes SHA-256...
+ - TS_ITEM.csv (bruto): 81,903 bytes | SHA-256: 8266fd297ae12664449e126b592f0b006a19d64d5880637bfd83e0b950a9c805
+ - TS_ALUNO_9EF.csv (bruto): 1,114,818,261 bytes | SHA-256: c815df7731f2b538ba74eca6f644a7c4cfa4dbe566aa35365e7c5d1c9af13062
+ - saeb_descritores.csv (agregado do projeto): 6,308,599 bytes | SHA-256: afd6a6871df08924f56c44902ddd93497cda8cdbc5e430f3e36567f868bbd7d0
+ - saeb-2023-9ef.json (dataset publicado): 818,611 bytes | SHA-256: 3f57d5297d8c37e4a4ce15b589f217909a5676b23576ff82529370605af18752
+
+[2/6] Copiando TS_ITEM.csv original preservado sem altera�es...
+ - TS_ITEM.csv copiado com sucesso! Hash conferido: 8266fd297ae12664449e126b592f0b006a19d64d5880637bfd83e0b950a9c805
+
+[3/6] Gerando itens_9ef_lp_mt.csv (extrato de itens 9� EF LP e MT)...
+ - Itens do 9� EF extra�dos: 182 registros (LP: 91, MT: 91)
+ - Salvo em: C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTA�O\FUNDAMENTA�O TE�RICA\HABILIDADES SAEB\pacote_evidencias_saeb_2023\itens_9ef_lp_mt.csv
+
+[4/6] Gerando cabecalho_alunos_9ef.txt...
+ - Cabe�alho extra�do: 153 colunas identificadas.
+ - Salvo em: C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTA�O\FUNDAMENTA�O TE�RICA\HABILIDADES SAEB\pacote_evidencias_saeb_2023\cabecalho_alunos_9ef.txt
+
+[5/6] Executando diagn�sticos num�ricos completos do ETL no DuckDB...
+ - Total de registros lidos de TS_ALUNO_9EF.csv: 2,502,907
+ - Estudantes �nicos (ID_ALUNO): 2,502,907
+ - Registros inclu�dos no ETL (IN_SITUACAO_CENSO = 1): 2,489,289
+ - Registros exclu�dos no ETL (IN_SITUACAO_CENSO = 0): 13,618
+ - Recalculando os 68 c�digos a partir dos microdados brutos...
+ - Tabela de compara�o recalculada gerada em: C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTA�O\FUNDAMENTA�O TE�RICA\HABILIDADES SAEB\pacote_evidencias_saeb_2023\verificacao_etl.csv
+ - Diferen�a percentual m�xima entre microdados brutos e dashboard: 0.000000000009%
+ - Relat�rio de verifica�o salvo em: C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTA�O\FUNDAMENTA�O TE�RICA\HABILIDADES SAEB\pacote_evidencias_saeb_2023\verificacao_etl.md
+
+[6/6] Gerando documentacao_itens_adicionais.md...
+ - Documenta�o dos itens adicionais gerada em: C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTA�O\FUNDAMENTA�O TE�RICA\HABILIDADES SAEB\pacote_evidencias_saeb_2023\documentacao_itens_adicionais.md
+
+[OK] Pacote ZIP criado com sucesso: C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTA�O\FUNDAMENTA�O TE�RICA\HABILIDADES SAEB\pacote_evidencias_saeb_2023.zip (46,490 bytes)
+Tempo total de execu�o: 42.33s
