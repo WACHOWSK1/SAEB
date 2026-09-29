@@ -43,9 +43,17 @@
 5. **Substituição de KPIs Fictícios:**
    - Removidos cards com valores não deriváveis da base agrupada ("Escolas Avaliadas" e "Municípios Participantes").
    - Adicionados dois KPIs ancorados em dados reais: **"Descritores em Nível Crítico"** e **"UFs Analisadas (27)"**.
-6. **Filtros e Interface Visual:**
-   - Filtro de UF ajustado para nomes por extenso (`São Paulo`, `Rio de Janeiro`) correspondentes aos microdados.
-   - Inserção da logo da **UTFPR / PPG FCET** no menu lateral.
+7. **Auditoria Metodológica Externa (68 Habilidades vs. 58 Tradicionais):**
+   - **Origem dos 68 Códigos em `TS_ITEM.csv`:** A Matriz de Referência impressa de 2001 possui 58 descritores teóricos (21 LP + 37 MT). No entanto, nos microdados reais do SAEB 2023 (`TS_ITEM.csv` do 9º ano EF), existem exatamente **68 códigos únicos avaliados**:
+     - **Língua Portuguesa (24 códigos):** 21 descritores tradicionais (D1 a D21) + 3 habilidades de transição BNCC (`H11`, `H12`, `H24`).
+     - **Matemática (44 códigos):** 35 descritores tradicionais avaliados (D1 a D29, D31, D33 a D37; D30 e D32 não possuíram itens testados em 2023) + 9 habilidades alinhadas à BNCC (`9A1.3`, `9A2.1`, `9A2.2`, `9A2.3`, `9E2.1`, `9N1.1`, `9N1.5`, `9N1.6`, `9N1.7`).
+   - **Impacto nos Níveis de Desempenho:**
+     - Base Completa (68 habilidades): 23 Críticos (< 40%) e 26 em Atenção (40–50%).
+     - Matriz Clássica Apenas (56 descritores D): 16 Críticos e 22 em Atenção.
+     - Itens de Transição BNCC (12 habilidades): 7 Críticos, 4 em Atenção e 1 Adequado.
+   - **Distinção Estatística entre Estudantes e Respostas (D14):**
+     - O valor de 3.553.706 no descritor D14 de Língua Portuguesa refere-se ao somatório de respostas aos 5 itens de prova que avaliaram esse descritor no modelo de Bloco Incompleto Balanceado (BIB), e **não** ao total de estudantes únicos (que totaliza ~2,49 milhões no Brasil).
+     - Rótulo corrigido na interface para **"Total de Respostas Computadas"** com nota técnica explicativa.
 
 ---
 

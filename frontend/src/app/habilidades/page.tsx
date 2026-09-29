@@ -28,6 +28,7 @@ export default function HabilidadesPage() {
   const [descritores, setDescritores] = useState<DescritorItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeDisc, setActiveDisc] = useState<'Todos' | 'Língua Portuguesa' | 'Matemática'>('Todos');
+  const [matrizFilter, setMatrizFilter] = useState<'todas' | 'classica' | 'bncc'>('todas');
   const [searchTerm, setSearchTerm] = useState('');
 
   const ufsList = [
@@ -53,11 +54,17 @@ export default function HabilidadesPage() {
 
   const filtered = descritores.filter((item) => {
     const matchDisc = activeDisc === 'Todos' || item.DS_DISCIPLINA === activeDisc;
+    const isClassic = item.CO_DESCRITOR.startsWith('D');
+    const matchMatriz = matrizFilter === 'todas'
+      ? true
+      : matrizFilter === 'classica'
+        ? isClassic
+        : !isClassic;
     const matchSearch = !searchTerm || (
       item.CO_DESCRITOR.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.descricao.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    return matchDisc && matchSearch;
+    return matchDisc && matchMatriz && matchSearch;
   });
 
   const columns = [
@@ -188,12 +195,23 @@ export default function HabilidadesPage() {
                       <Radio.Button value="Matemática">Matemática ({descritores.filter(d => d.DS_DISCIPLINA === 'Matemática').length})</Radio.Button>
                     </Radio.Group>
 
+                    <Radio.Group
+                      value={matrizFilter}
+                      onChange={(e) => setMatrizFilter(e.target.value)}
+                      buttonStyle="solid"
+                      className="font-bold text-xs"
+                    >
+                      <Radio.Button value="todas">Todas as Matrizes</Radio.Button>
+                      <Radio.Button value="classica">Matriz Clássica (D)</Radio.Button>
+                      <Radio.Button value="bncc">Itens BNCC</Radio.Button>
+                    </Radio.Group>
+
                     <Input
                       placeholder="Buscar habilidade..."
                       prefix={<SearchOutlined className="text-gray-400" />}
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-56 text-xs font-medium"
+                      className="w-52 text-xs font-medium"
                       allowClear
                     />
                   </div>

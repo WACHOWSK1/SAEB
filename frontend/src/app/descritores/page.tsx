@@ -143,8 +143,13 @@ export default function DescritoresPage() {
                         <Descriptions.Item label="Componente Curricular">
                           <span className="font-bold text-[#202124]">{currentItem.DS_DISCIPLINA}</span>
                         </Descriptions.Item>
-                        <Descriptions.Item label="Descrição Oficial (Matriz SAEB)">
+                        <Descriptions.Item label="Descrição Oficial (Matriz SAEB / BNCC)">
                           <span className="text-[#202124] font-medium">{currentItem.descricao}</span>
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Matriz de Origem">
+                          <Tag color={currentItem.CO_DESCRITOR.startsWith('D') ? 'blue' : 'purple'} className="font-semibold text-xs">
+                            {currentItem.CO_DESCRITOR.startsWith('D') ? 'Matriz Tradicional SAEB (Portaria 2001)' : 'Item de Transição / Alinhamento BNCC (Portaria 267/2023)'}
+                          </Tag>
                         </Descriptions.Item>
                         <Descriptions.Item label="População Analisada">
                           Estudantes do {filters.anoEscolar || '9º Ano EF'} (SAEB 2023)
@@ -187,11 +192,14 @@ export default function DescritoresPage() {
                       />
                       <hr className="border-[#E4E4E4]" />
                       <Statistic
-                        title="Total de Estudantes (Respostas)"
+                        title="Total de Respostas Computadas"
                         value={currentItem.TOTAL_RESPOSTAS}
                         formatter={(val) => Number(val).toLocaleString('pt-BR')}
                         styles={{ content: { color: '#202124', fontWeight: 800 } }}
                       />
+                      <p className="text-[11px] text-[#5F6368] m-0 -mt-2">
+                        Amostra agregada de respostas computadas aos itens associados a este descritor (BIB).
+                      </p>
                       <hr className="border-[#E4E4E4]" />
                       <Statistic
                         title="Total de Acertos Computados"
