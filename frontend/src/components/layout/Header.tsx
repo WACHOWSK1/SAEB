@@ -30,9 +30,9 @@ export const Header: React.FC<HeaderProps> = ({
             </Tag>
           </div>
           <p className="text-xs text-[#5F6368] mt-1 m-0 flex items-center gap-1.5">
-            <span>Microdados Oficiais INEP/MEC</span>
+            <span>Diagnóstico elaborado a partir de dados do Inep</span>
             <span>•</span>
-            <span>Última atualização: Microdados 2023 (Edição Completa)</span>
+            <span>SAEB 2023 — 9º ano do Ensino Fundamental</span>
           </p>
         </div>
       </div>

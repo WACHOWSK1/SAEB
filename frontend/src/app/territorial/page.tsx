@@ -25,7 +25,7 @@ export default function TerritorialPage() {
     search: '',
   });
 
-  const [ufData, setUfData] = useState<{ mediaBr: number; ufs: UfPerformanceItem[] }>({ mediaBr: 46.8, ufs: [] });
+  const [ufData, setUfData] = useState<{ mediaBr: number; ufs: UfPerformanceItem[] }>({ mediaBr: 0, ufs: [] });
   const [loading, setLoading] = useState(true);
 
   const ufsList = [

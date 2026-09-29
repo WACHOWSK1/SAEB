@@ -37,19 +37,25 @@ export interface DescritorItem {
   DS_DISCIPLINA: string;
   descricao: string;
   pct: number;
-  pct_simples: number;
-  pct_ponderado: number;
+  pct_simples: number | null;
+  pct_ponderado: number | null;
+  matriz2001: boolean;
   TOTAL_RESPOSTAS: number;
   TOTAL_ACERTOS: number;
+  PESO_TOTAL_RESPOSTAS: number;
+  PESO_TOTAL_ACERTOS: number;
   faixa: PerformanceLevel;
   nivelLabel: string;
 }
 
 export interface SaebKpiData {
   mediaGeral: number;
-  totalEstudantes: number;
-  totalEscolas: number;
-  totalMunicipios: number;
+  totalEstudantes: number | null;
+  totalEscolas: number | null;
+  totalMunicipios: number | null;
+  totalRespostas: number;
+  totalUFs: number;
+  correspondenciasPendentes: number;
   totalDescritores: number;
   topDescritor: {
     codigo: string;

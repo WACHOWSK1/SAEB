@@ -25,13 +25,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         <span className="font-extrabold text-[#D9AD00] block mb-0.5">
           • Ponderada (Peso INEP):
         </span>
-        Utiliza o peso amostral (<code>PESO_ALUNO</code>) fornecido pelo INEP para a expansão populacional. Garante que os resultados reflitam a representatividade estatística real da população de estudantes no SAEB 2023.
+        Utiliza o peso amostral (<code>PESO_ALUNO</code>) fornecido pelo INEP para a expansão populacional. Calcula a razão entre os totais ponderados do agregado. Sua interpretação depende dos critérios de inclusão e do plano amostral.
       </div>
       <div>
         <span className="font-extrabold text-[#5F6368] block mb-0.5">
           • Simples (Direta):
         </span>
-        Média aritmética direta do banco de dados (cada estudante/resposta possui peso igual a 1). Indicada para análise puramente descritiva da amostra observada.
+        Média aritmética direta do banco de dados (cada resposta computada possui peso igual a 1). Indicada para análise puramente descritiva da amostra observada.
       </div>
     </div>
   );
@@ -59,11 +59,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             onChange={(val: AnoEscolar) => onFilterChange({ anoEscolar: val })}
             className="w-full text-xs font-semibold"
             options={[
-              { value: '2º Ano EF', label: '2º Ano EF' },
-              { value: '5º Ano EF', label: '5º Ano EF' },
               { value: '9º Ano EF', label: '9º Ano EF' },
-              { value: '3ª/4ª Série EM', label: '3ª Série EM' },
-              { value: 'Todos', label: 'Todos os Anos' },
             ]}
           />
         </div>

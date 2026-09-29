@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "tsc --module commonjs --moduleResolution node --target es2020 --outDir .test-build --skipLibCheck src/types/saeb.ts src/services/calculations.ts src/services/api.ts src/services/thresholds.ts && node --test tests/data.test.cjs"
   },
   "dependencies": {
     "@ant-design/icons": "^6.3.2",

@@ -19,7 +19,7 @@ import { classifyPerformance } from '../../services/api';
 interface AnalyticsTableProps {
   data: DescritorItem[];
   thresholds: PerformanceThresholds;
-  onSelectDescritor?: (code: string) => void;
+  onSelectDescritor?: (code: string, disc: string) => void;
 }
 
 export const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
@@ -47,7 +47,7 @@ export const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
         <Tag
           color="gold"
           className="font-black text-black border-gold-400 cursor-pointer"
-          onClick={() => onSelectDescritor?.(info.getValue() as string)}
+          onClick={() => onSelectDescritor?.(info.getValue() as string, info.row.original.DS_DISCIPLINA)}
         >
           {info.getValue() as string}
         </Tag>
@@ -55,7 +55,7 @@ export const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
     },
     {
       accessorKey: 'descricao',
-      header: 'Descrição da Habilidade (Matriz SAEB)',
+      header: 'Descrição de referência',
       cell: (info) => (
         <span className="text-gray-700 text-xs">{info.getValue() as string}</span>
       ),
@@ -122,7 +122,7 @@ export const AnalyticsTable: React.FC<AnalyticsTableProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#E4E4E4]">
         <div>
           <h3 className="text-sm font-extrabold text-[#202124] uppercase tracking-wider m-0">
-            Tabela Analítica dos Descritores (TanStack Table)
+            Tabela Analítica dos Descritores
           </h3>
           <p className="text-xs text-[#5F6368] m-0">
             Exibindo {table.getFilteredRowModel().rows.length} habilidades ordenadas por percentual de acerto.

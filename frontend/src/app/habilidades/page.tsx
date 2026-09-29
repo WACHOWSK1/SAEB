@@ -6,12 +6,15 @@ import { SearchOutlined, BulbOutlined } from '@ant-design/icons';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Header } from '../../components/layout/Header';
 import { FilterBar } from '../../components/layout/FilterBar';
-import { SaebFilterState, DescritorItem, DEFAULT_THRESHOLDS } from '../../types/saeb';
+import { SaebFilterState, DescritorItem } from '../../types/saeb';
 import { fetchSaebDescritores, classifyPerformance } from '../../services/api';
+
+import { useThresholds } from '../../services/thresholds';
 
 const { Content } = Layout;
 
 export default function HabilidadesPage() {
+  const thresholds = useThresholds();
   const [collapsed, setCollapsed] = useState(false);
   const [filters, setFilters] = useState<SaebFilterState>({
     anoEscolar: '9º Ano EF',
@@ -28,7 +31,7 @@ export default function HabilidadesPage() {
   const [descritores, setDescritores] = useState<DescritorItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeDisc, setActiveDisc] = useState<'Todos' | 'Língua Portuguesa' | 'Matemática'>('Todos');
-  const [matrizFilter, setMatrizFilter] = useState<'todas' | 'classica' | 'bncc'>('todas');
+  const [matrizFilter, setMatrizFilter] = useState<'todas' | 'classica' | 'adicionais'>('todas');
   const [searchTerm, setSearchTerm] = useState('');
 
   const ufsList = [
@@ -45,16 +48,16 @@ export default function HabilidadesPage() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const res = await fetchSaebDescritores(filters, DEFAULT_THRESHOLDS);
+      const res = await fetchSaebDescritores(filters, thresholds);
       setDescritores(res.descritores);
       setLoading(false);
     }
     load();
-  }, [filters]);
+  }, [filters, thresholds]);
 
   const filtered = descritores.filter((item) => {
     const matchDisc = activeDisc === 'Todos' || item.DS_DISCIPLINA === activeDisc;
-    const isClassic = item.CO_DESCRITOR.startsWith('D');
+    const isClassic = item.matriz2001;
     const matchMatriz = matrizFilter === 'todas'
       ? true
       : matrizFilter === 'classica'
@@ -91,7 +94,7 @@ export default function HabilidadesPage() {
       ),
     },
     {
-      title: 'Descrição Oficial da Habilidade (Matriz SAEB 2023 / BNCC)',
+      title: 'Descrição de referência (síntese)',
       dataIndex: 'descricao',
       key: 'descricao',
       render: (desc: string) => (
@@ -117,7 +120,7 @@ export default function HabilidadesPage() {
       key: 'nivel',
       width: 160,
       render: (_: any, record: DescritorItem) => {
-        const perf = classifyPerformance(record.pct, DEFAULT_THRESHOLDS);
+        const perf = classifyPerformance(record.pct, thresholds);
         return (
           <Tag
             style={{
@@ -179,7 +182,7 @@ export default function HabilidadesPage() {
                       Catálogo Completo das Habilidades Avaliadas ({filters.anoEscolar || '9º Ano EF'})
                     </h2>
                     <p className="text-xs text-[#5F6368] m-0 mt-1">
-                      Exibindo todas as {filtered.length} habilidades oficiais da Matriz de Referência ({filters.anoEscolar} · SAEB 2023).
+                      Exibindo {filtered.length} códigos com dados no recorte ({filters.anoEscolar} · SAEB 2023). Consulte a correspondência documental na ficha de cada código.
                     </p>
                   </div>
 
@@ -201,9 +204,9 @@ export default function HabilidadesPage() {
                       buttonStyle="solid"
                       className="font-bold text-xs"
                     >
-                      <Radio.Button value="todas">Todas as Matrizes</Radio.Button>
+                      <Radio.Button value="todas">Todos os códigos</Radio.Button>
                       <Radio.Button value="classica">Matriz Clássica (D)</Radio.Button>
-                      <Radio.Button value="bncc">Itens BNCC</Radio.Button>
+                      <Radio.Button value="adicionais">Códigos adicionais</Radio.Button>
                     </Radio.Group>
 
                     <Input

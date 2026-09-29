@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Card, Row, Col, Alert, Select, Table, Tag } from 'antd';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Header } from '../../components/layout/Header';
-import { SaebFilterState, EquityGapItem, DEFAULT_THRESHOLDS } from '../../types/saeb';
+import { SaebFilterState, EquityGapItem } from '../../types/saeb';
 import { fetchSaebEquidade } from '../../services/api';
 
 const { Content } = Layout;
@@ -23,7 +23,7 @@ export default function ComparacaoPage() {
     search: '',
   });
 
-  const [equidadeData, setEquidadeData] = useState<{ avgGap: number; items: EquityGapItem[] }>({ avgGap: 19.4, items: [] });
+  const [equidadeData, setEquidadeData] = useState<{ avgGap: number; items: EquityGapItem[] }>({ avgGap: 0, items: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,13 +59,13 @@ export default function ComparacaoPage() {
       title: 'Rede Pública (%)',
       dataIndex: 'Pública',
       key: 'Pública',
-      render: (v: number) => <span className="font-mono text-[#202124] font-bold">{v ? v.toFixed(1) + '%' : '--'}</span>,
+      render: (v: number) => <span className="font-mono text-[#202124] font-bold">{Number.isFinite(v) ? v.toFixed(1) + '%' : 'Dado não disponível'}</span>,
     },
     {
       title: 'Rede Privada (%)',
       dataIndex: 'Privada',
       key: 'Privada',
-      render: (v: number) => <span className="font-mono text-[#202124] font-bold">{v ? v.toFixed(1) + '%' : '--'}</span>,
+      render: (v: number) => <span className="font-mono text-[#202124] font-bold">{Number.isFinite(v) ? v.toFixed(1) + '%' : 'Dado não disponível'}</span>,
     },
     {
       title: 'Gap (Privada - Pública)',
@@ -120,15 +120,15 @@ export default function ComparacaoPage() {
                 <Col span={24} md={8}>
                   <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
                     <span className="text-xs font-bold text-[#5F6368] uppercase">Desigualdade Média (Gap Privada vs Pública)</span>
-                    <h2 className="text-3xl font-black text-[#202124] mt-2 mb-0">+{equidadeData.avgGap.toFixed(1)} pp</h2>
-                    <p className="text-xs text-[#5F6368] mt-1 m-0">Vantagem média em pontos percentuais da Rede Privada no SAEB 2023</p>
+                    <h2 className="text-3xl font-black text-[#202124] mt-2 mb-0">{equidadeData.avgGap >= 0 ? '+' : ''}{equidadeData.avgGap.toFixed(1)} pp</h2>
+                    <p className="text-xs text-[#5F6368] mt-1 m-0">Média simples das diferenças por código, na métrica selecionada</p>
                   </Card>
                 </Col>
                 <Col span={24} md={16}>
                   <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs">
                     <span className="text-xs font-bold text-[#5F6368] uppercase">Nota Metodológica sobre Equidade</span>
                     <p className="text-xs text-[#202124] mt-2 m-0 leading-relaxed">
-                      O Gap em pontos percentuais representa a diferença direta de acertos entre os estudantes da Rede Privada e da Rede Pública. Esta métrica possibilita identificar habilidades com maior assimetria de aprendizado sem necessidade de dados temporais.
+                      A diferença em pontos percentuais corresponde ao percentual da rede privada menos o da pública em cada código. O indicador geral é a média simples dessas diferenças. Trata-se de uma comparação descritiva entre redes, sem ajuste pelas características dos estudantes e escolas.
                     </p>
                   </Card>
                 </Col>
@@ -150,4 +150,3 @@ export default function ComparacaoPage() {
     </Layout>
   );
 }
-

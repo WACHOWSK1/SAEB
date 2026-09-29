@@ -5,12 +5,15 @@ import { Layout, Card, Tag, Select, Row, Col, Alert, Descriptions, Statistic, Pr
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Header } from '../../components/layout/Header';
 import { FilterBar } from '../../components/layout/FilterBar';
-import { SaebFilterState, DescritorItem, DEFAULT_THRESHOLDS } from '../../types/saeb';
+import { SaebFilterState, DescritorItem } from '../../types/saeb';
 import { fetchSaebDescritores, classifyPerformance } from '../../services/api';
+
+import { useThresholds } from '../../services/thresholds';
 
 const { Content } = Layout;
 
 export default function DescritoresPage() {
+  const thresholds = useThresholds();
   const [collapsed, setCollapsed] = useState(false);
   const [filters, setFilters] = useState<SaebFilterState>({
     anoEscolar: '9º Ano EF',
@@ -39,26 +42,30 @@ export default function DescritoresPage() {
     'Sergipe', 'Tocantins'
   ];
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const disc = params.get('disc');
+    if (code && disc) setSelectedKey(`${code}|${disc}`);
+  }, []);
+
   const makeKey = (code: string, disc: string) => `${code}|${disc}`;
 
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const res = await fetchSaebDescritores(filters, DEFAULT_THRESHOLDS);
+      const res = await fetchSaebDescritores(filters, thresholds);
       setDescritores(res.descritores);
       if (res.descritores.length > 0) {
-        const exists = res.descritores.some(d => makeKey(d.CO_DESCRITOR, d.DS_DISCIPLINA) === selectedKey);
-        if (!exists) {
-          setSelectedKey(makeKey(res.descritores[0].CO_DESCRITOR, res.descritores[0].DS_DISCIPLINA));
-        }
+        setSelectedKey(previous => res.descritores.some(d => makeKey(d.CO_DESCRITOR, d.DS_DISCIPLINA) === previous) ? previous : makeKey(res.descritores[0].CO_DESCRITOR, res.descritores[0].DS_DISCIPLINA));
       }
       setLoading(false);
     }
     load();
-  }, [filters]);
+  }, [filters, thresholds]);
 
   const currentItem = descritores.find((d) => makeKey(d.CO_DESCRITOR, d.DS_DISCIPLINA) === selectedKey) || descritores[0];
-  const perf = currentItem ? classifyPerformance(currentItem.pct, DEFAULT_THRESHOLDS) : classifyPerformance(40.2);
+  const perf = classifyPerformance(currentItem?.pct ?? 0, thresholds);
 
   const sortedDesc = [...descritores].sort((a, b) => b.pct - a.pct);
   const rankPos = currentItem ? sortedDesc.findIndex((d) => d.CO_DESCRITOR === currentItem.CO_DESCRITOR && d.DS_DISCIPLINA === currentItem.DS_DISCIPLINA) + 1 : 1;
@@ -143,12 +150,12 @@ export default function DescritoresPage() {
                         <Descriptions.Item label="Componente Curricular">
                           <span className="font-bold text-[#202124]">{currentItem.DS_DISCIPLINA}</span>
                         </Descriptions.Item>
-                        <Descriptions.Item label="Descrição Oficial (Matriz SAEB / BNCC)">
+                        <Descriptions.Item label="Descrição de referência (síntese)">
                           <span className="text-[#202124] font-medium">{currentItem.descricao}</span>
                         </Descriptions.Item>
-                        <Descriptions.Item label="Matriz de Origem">
-                          <Tag color={currentItem.CO_DESCRITOR.startsWith('D') ? 'blue' : 'purple'} className="font-semibold text-xs">
-                            {currentItem.CO_DESCRITOR.startsWith('D') ? 'Matriz Tradicional SAEB (Portaria 2001)' : 'Item de Transição / Alinhamento BNCC (Portaria 267/2023)'}
+                        <Descriptions.Item label="Correspondência documental">
+                          <Tag color={currentItem.matriz2001 ? 'blue' : 'purple'} className="font-semibold text-xs">
+                            {currentItem.matriz2001 ? 'Matriz de referência de 2001' : 'Código adicional — origem a documentar'}
                           </Tag>
                         </Descriptions.Item>
                         <Descriptions.Item label="População Analisada">
@@ -185,7 +192,7 @@ export default function DescritoresPage() {
                   <Col span={24} lg={8}>
                     <Card className="bg-white border-[#E4E4E4] rounded-xl shadow-2xs space-y-4" title={<span className="font-extrabold text-[#202124]">Indicadores Agregados</span>}>
                       <Statistic
-                        title="Taxa de Acerto Ponderada"
+                        title={filters.metrica === 'ponderado' ? 'Taxa de Acerto Ponderada' : 'Taxa de Acerto Simples'}
                         value={currentItem.pct.toFixed(1)}
                         suffix="%"
                         styles={{ content: { color: perf.color, fontWeight: 900, fontSize: '32px' } }}
@@ -218,5 +225,4 @@ export default function DescritoresPage() {
     </Layout>
   );
 }
-
 

@@ -88,3 +88,6 @@ python src/api/server.py
 cd frontend
 npm run start -- -p 3000
 ```
+# Revisão dos cálculos — 29/09/2026
+
+O registro detalhado e os limites da conferência estão em `docs/REVISAO_SAEB_2023.md`. Esta revisão substitui, para o site Next.js, as afirmações anteriores de auditoria integral. Foram conferidos os somatórios do agregado e corrigidos os cálculos do frontend; os microdados originais não foram reprocessados. A origem experimental/BNCC dos códigos adicionais e o total de estudantes únicos não foram demonstrados pelos arquivos presentes neste repositório.

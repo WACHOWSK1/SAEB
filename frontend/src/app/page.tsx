@@ -17,12 +17,15 @@ import { DescriptorRankingChart } from '../components/charts/DescriptorRankingCh
 import { DistributionDonutChart } from '../components/charts/DistributionDonutChart';
 import { RadarDimensionsChart } from '../components/charts/RadarDimensionsChart';
 import { AnalyticsTable } from '../components/tables/AnalyticsTable';
-import { SaebFilterState, SaebKpiData, DescritorItem, DEFAULT_THRESHOLDS } from '../types/saeb';
+import { SaebFilterState, SaebKpiData, DescritorItem } from '../types/saeb';
 import { fetchSaebDescritores } from '../services/api';
+
+import { useThresholds } from '../services/thresholds';
 
 const { Content } = Layout;
 
 export default function VisaoGeralPage() {
+  const thresholds = useThresholds();
   const [collapsed, setCollapsed] = useState(false);
   const [filters, setFilters] = useState<SaebFilterState>({
     anoEscolar: '9º Ano EF',
@@ -54,13 +57,13 @@ export default function VisaoGeralPage() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const res = await fetchSaebDescritores(filters, DEFAULT_THRESHOLDS);
+      const res = await fetchSaebDescritores(filters, thresholds);
       setKpiData(res.kpis);
       setDescritores(res.descritores);
       setLoading(false);
     }
     load();
-  }, [filters]);
+  }, [filters, thresholds]);
 
   const handleFilterChange = (updated: Partial<SaebFilterState>) => {
     setFilters((prev) => ({ ...prev, ...updated }));
@@ -126,6 +129,7 @@ export default function VisaoGeralPage() {
           {/* Conteúdo principal — só exibe quando há dados */}
           {hasData && (
             <div className={loading ? 'opacity-50 pointer-events-none transition-opacity duration-300' : 'transition-opacity duration-300'}>
+              <Alert type="info" showIcon className="mb-4" title="Leitura dos resultados" description={`${kpiData.totalDescritores} códigos com dados, dos quais ${kpiData.correspondenciasPendentes} adicionais à matriz de 2001. As faixas são critérios próprios do painel. Consulte a nota técnica antes de utilizar os resultados na pesquisa.`} />
               {/* KPI Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 {/* ROW 1 */}
@@ -133,17 +137,17 @@ export default function VisaoGeralPage() {
                   title="Média Geral de Acerto"
                   value={`${kpiData.mediaGeral.toFixed(1)}%`}
                   subtitle={`${kpiData.totalDescritores} habilidades avaliadas`}
-                  tooltipText="Percentual médio ponderado de acertos calculado com base nos pesos amostrais dos estudantes do 9º ano EF no SAEB 2023."
+                  tooltipText={`Percentual calculado pela razão entre os somatórios da métrica ${filters.metrica === 'ponderado' ? 'ponderada' : 'simples'}.`}
                   statusBorderColor="#FFCC00"
                   accentColor="#202124"
                   icon={<PercentageOutlined />}
                 />
 
                 <KpiCard
-                  title="Estudantes Avaliados"
-                  value={(kpiData.totalEstudantes || 0).toLocaleString('pt-BR')}
-                  subtitle="Estudantes no recorte selecionado"
-                  tooltipText="Número total de estudantes do 9º ano do Ensino Fundamental que participaram da avaliação no recorte selecionado."
+                  title="Respostas Computadas"
+                  value={kpiData.totalRespostas.toLocaleString('pt-BR')}
+                  subtitle="Respostas a itens no recorte selecionado"
+                  tooltipText="Somatório de respostas computadas aos itens. Um estudante pode contribuir com várias respostas; não é uma contagem de participantes únicos."
                   statusBorderColor="#202124"
                   accentColor="#202124"
                   icon={<UserOutlined />}
@@ -153,7 +157,7 @@ export default function VisaoGeralPage() {
                   title="Descritores em Nível Crítico"
                   value={`${kpiData.criticosCount}`}
                   subtitle={`${kpiData.criticosPct.toFixed(1)}% do total de habilidades`}
-                  tooltipText="Quantidade de descritores com taxa de acerto ponderado inferior a 40%, exigindo intervenção pedagógica prioritária."
+                  tooltipText={`Quantidade de códigos com percentual inferior a ${thresholds.criticoMax}%, na métrica selecionada. Critério próprio do painel.`}
                   statusBorderColor="#D32F2F"
                   accentColor="#D32F2F"
                   icon={<WarningOutlined />}
@@ -162,8 +166,8 @@ export default function VisaoGeralPage() {
                 {/* ROW 2 */}
                 <KpiCard
                   title="UFs Analisadas"
-                  value="27"
-                  subtitle="Todas as unidades federativas"
+                  value={String(kpiData.totalUFs)}
+                  subtitle="UFs com dados no recorte selecionado"
                   tooltipText="Total de unidades federativas com registros válidos nos microdados SAEB 2023 para o 9º ano."
                   statusBorderColor="#202124"
                   accentColor="#202124"
@@ -197,15 +201,16 @@ export default function VisaoGeralPage() {
                   <DescriptorRankingChart
                     items={filteredDescritores}
                     title="Ranking Completo de Desempenho dos Descritores (SAEB 2023)"
-                    thresholds={DEFAULT_THRESHOLDS}
+                    thresholds={thresholds}
                   />
                 </div>
                 <div>
                   <DistributionDonutChart
                     items={filteredDescritores}
-                    thresholds={DEFAULT_THRESHOLDS}
+                    thresholds={thresholds}
                   />
                   <RadarDimensionsChart
+                    metric={filters.metrica}
                     items={filteredDescritores}
                     title="Desempenho por Eixo Temático"
                   />
@@ -215,8 +220,8 @@ export default function VisaoGeralPage() {
               {/* TanStack Analytics Table */}
               <AnalyticsTable
                 data={filteredDescritores}
-                thresholds={DEFAULT_THRESHOLDS}
-                onSelectDescritor={(code) => (window.location.href = `/descritores?code=${code}`)}
+                thresholds={thresholds}
+                onSelectDescritor={(code, disc) => (window.location.href = `/descritores/?code=${encodeURIComponent(code)}&disc=${encodeURIComponent(disc)}`)}
               />
             </div>
           )}

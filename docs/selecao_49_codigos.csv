@@ -1,0 +1,50 @@
+﻿ano;etapa;territorio;rede;componente;codigo;correspondencia;descricao_sintese;respostas;acertos_observados;percentual_ponderado;percentual_simples;faixa;selecionado_critico_atencao
+2023;9º EF;Brasil;Todas;Língua Portuguesa;H12;Código adicional;Origem e descrição a documentar;709660;226992;35.62523372;31.98602148;Crítico;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;H11;Código adicional;Origem e descrição a documentar;709530;234765;36.03859539;33.08739588;Crítico;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;H24;Código adicional;Origem e descrição a documentar;709530;267211;40.65449746;37.66028216;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D7;Matriz 2001;Identificar a tese de um texto;2134501;837014;42.06025979;39.21356795;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D14;Matriz 2001;Distinguir um fato da opinião relativa a esse fato;3553706;1428839;43.01235176;40.20701206;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D20;Matriz 2001;Reconhecer diferentes formas de tratar uma informação na comparação de textos que tratam do mesmo tema;715521;291910;43.87440476;40.79684593;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D2;Matriz 2001;Estabelecer relações entre partes de um texto, identificando repetições ou substituições que contribuem para a continuidade de um texto;2850022;1252501;47.35964432;43.94706427;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D19;Matriz 2001;Reconhecer o efeito de sentido decorrente da exploração de recursos ortográficos e/ou morfossintáticos;2844189;1239800;47.64207976;43.59063339;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D9;Matriz 2001;Diferenciar as partes principais das secundárias em um texto;4978217;2294739;49.17768500;46.09560009;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D3;Matriz 2001;Inferir o sentido de uma palavra ou expressão;3553566;1610895;49.31526321;45.33178784;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D15;Matriz 2001;Estabelecer relações lógico-discursivas presentes no texto marcadas por conjunções, advérbios etc.;4263198;1928053;49.35264654;45.22550911;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D21;Matriz 2001;Reconhecer posições distintas entre duas ou mais opiniões relativas ao mesmo fato ou ao mesmo tema;1431003;656462;49.39999517;45.87425743;Atenção;True
+2023;9º EF;Brasil;Todas;Língua Portuguesa;D10;Matriz 2001;Identificar o conflito gerador do enredo e os elementos que constroem a narrativa;3559570;1643276;49.72975053;46.16501431;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D15;Matriz 2001;Resolver problema utilizando relações entre diferentes unidades de medida;715482;76170;12.78108680;10.64597013;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D8;Matriz 2001;Resolver problema utilizando propriedades dos polígonos (soma de seus ângulos internos, número de diagonais, cálculo da medida de cada ângulo interno nos polígonos regulares);715521;96467;14.60647517;13.48206412;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;9N1.6;Código adicional;Origem e descrição a documentar;709517;136144;20.11078832;19.18826469;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;9N1.1;Código adicional;Origem e descrição a documentar;709660;143814;22.53704601;20.26519742;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D35;Matriz 2001;Identificar a relação entre as representações algébrica e geométrica de um sistema de equações do 1º grau;715521;158694;22.55427535;22.17880398;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;9N1.5;Código adicional;Origem e descrição a documentar;709530;162753;26.97674054;22.93814215;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D26;Matriz 2001;Resolver problema com números racionais que envolvam as operações fundamentais;1419177;345828;27.24264888;24.36820777;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D31;Matriz 2001;Resolver problema que envolva equação do 2º grau;709517;182639;27.77310884;25.74131416;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D10;Matriz 2001;Utilizar relações métricas do triângulo retângulo para resolver problemas significativos;715482;201279;30.45901149;28.13194462;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;9A1.3;Código adicional;Origem e descrição a documentar;1424900;404732;30.63684091;28.40423889;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;9A2.1;Código adicional;Origem e descrição a documentar;1418896;409497;31.26408966;28.86025473;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D18;Matriz 2001;Efetuar cálculos com números inteiros envolvendo as quatro operações e potenciação;1419019;407452;31.57782898;28.71363949;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D11;Matriz 2001;Reconhecer círculo/circunferência, seus elementos e algumas de suas relações;709530;214227;32.30233459;30.19280369;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D12;Matriz 2001;Resolver problema envolvendo o cálculo de perímetro de figuras planas;2837887;835774;32.56304848;29.45057361;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D6;Matriz 2001;Reconhecer ângulos como mudança de direção ou giros, identificando ângulos retos e não retos;1419034;413345;32.92880712;29.12861848;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D4;Matriz 2001;Identificar relação entre quadriláteros por meio de suas propriedades;1419039;433682;33.32448929;30.56166885;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D36;Matriz 2001;Resolver problema envolvendo informações apresentadas em tabelas e/ou gráficos;2140520;685894;35.57065814;32.04333526;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D24;Matriz 2001;Reconhecer as representações decimais dos números racionais como uma extensão do sistema decimal;1418896;477572;36.24438553;33.65799889;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D3;Matriz 2001;Identificar propriedades de triângulos pela comparação de medidas de lados e ângulos;1424900;457958;36.26118312;32.13965892;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D7;Matriz 2001;Reconhecer que as imagens de uma figura construída por transformação homotética são semelhantes, identificando propriedades e/ou medidas que se modificam ou não se alteram;1419047;490285;38.19191263;34.55030031;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D34;Matriz 2001;Identificar um sistema de equações do 1º grau que expressa um problema;2134672;744440;38.77096805;34.87374173;Crítico;True
+2023;9º EF;Brasil;Todas;Matemática;D23;Matriz 2001;Identificar frações equivalentes;1419149;508642;40.17843522;35.84133872;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;9A2.2;Código adicional;Origem e descrição a documentar;1425142;514707;40.24516433;36.11619053;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D27;Matriz 2001;Efetuar cálculos simples com valores aproximados de radicais;2128528;809310;40.25294079;38.02205092;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D21;Matriz 2001;Reconhecer as diferentes representações de um número racional;1419006;534811;41.80336663;37.68912887;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D9;Matriz 2001;Interpretar informações apresentadas por meio de coordenadas cartesianas;2134391;820398;42.47923964;38.43709986;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D13;Matriz 2001;Resolver problema envolvendo o cálculo de área de figuras planas;1419177;553343;42.60546135;38.99041487;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D22;Matriz 2001;Identificar fração como representação associada a diferentes significados (parte-todo, razão, quociente);2134501;851862;43.38334760;39.90918721;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D20;Matriz 2001;Resolver problema com números inteiros envolvendo as operações fundamentais;715482;286766;44.32187522;40.08011383;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D29;Matriz 2001;Resolver problema que envolva variação proporcional (direta ou inversa) entre grandezas;1425012;582344;44.43708538;40.86590148;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;9A2.3;Código adicional;Origem e descrição a documentar;709489;298935;45.52076688;42.13384563;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D14;Matriz 2001;Resolver problema envolvendo noções de volume;1419177;611067;46.07174569;43.05784268;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D19;Matriz 2001;Resolver problema com números naturais envolvendo diferentes significados das operações;2134540;904268;46.07550448;42.36360059;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D5;Matriz 2001;Reconhecer a conservação ou modificação de medidas dos lados, do perímetro, da área em ampliação e/ou redução de figuras poligonais usando malhas quadriculadas;715521;314978;46.78577703;44.02079045;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;9N1.7;Código adicional;Origem e descrição a documentar;1425051;623207;46.95152302;43.73225941;Atenção;True
+2023;9º EF;Brasil;Todas;Matemática;D33;Matriz 2001;Identificar uma equação ou inequação do 1º grau que expressa um problema;1418896;633502;48.72431597;44.64752878;Atenção;True
