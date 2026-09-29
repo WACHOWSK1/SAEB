@@ -25,21 +25,27 @@
 
 ## 🛡️ 3. Resumo da Auditoria Completa Realizada
 
-1. **Estatísticas e Percentuais Ponderados Reais:**
-   - Validados todos os 68 descritores oficiais diretamente da base agrupada em Parquet (`saeb_descritores.parquet`).
-   - Corrigidos percentuais de fallback em `api.ts` para baterem 100% com o cálculo ponderado oficial do INEP (`PESO_TOTAL_ACERTOS * 100 / PESO_TOTAL_RESPOSTAS`).
-2. **Alinhamento das Faixas de Aprendizagem (Backend vs Frontend):**
+1. **Auditoria Oficial das Matrizes do INEP (PDF 2001 vs Microdados 2023):**
+   - Cruzados todos os 344 itens do 9º Ano EF em `TS_ITEM.csv`: exatamente 24 descritores de Língua Portuguesa e 44 de Matemática (total de 68 descritores).
+   - **Correção Crítica no Descritor D35 de Matemática:** Foi detectada e corrigida uma atribuição errônea histórica. D35 estava descrito como tabelas/gráficos e alocado em Estatística/Probabilidade; na Matriz Oficial do SAEB (Quadro 2 do INEP), D35 é **"Identificar a relação entre as representações algébrica e geométrica de um sistema de equações do 1º grau"**, pertencente ao eixo **Álgebra e Funções**. A correção foi aplicada em `frontend/src/services/api.ts`, `RadarDimensionsChart.tsx`, `src/api/server.py` e `src/dashboard/app.py`.
+   - **Enriquecimento Textual Canônico:** Textos literais de D2, D20, D21 (LP) e D2, D5, D7, D8, D24, D37 (MT) alinhados 100% com o documento do INEP.
+2. **Estatísticas e Percentuais Ponderados Reais:**
+   - Validados todos os 68 descritores oficiais diretamente da base agrupada em Parquet (`saeb_descritores.parquet`) e `TS_ALUNO_9EF.csv`.
+   - Conferência automatizada de precisão: 0 divergências entre os cálculos ponderados da base e os dados servidos na interface.
+3. **Resiliência do Pipeline de ETL:**
+   - `src/etl/process_saeb.py` atualizado com detecção dinâmica e resiliente do caminho de microdados em múltiplos ambientes.
+4. **Alinhamento das Faixas de Aprendizagem (Backend vs Frontend):**
    - Atualizada a regra em `src/api/server.py` para utilizar 4 faixas alinhadas com o frontend:
      - 🔴 **Crítico:** < 40,0%
      - 🟠 **Atenção:** 40,0% – 50,0%
      - 🟡 **Intermediário:** 50,0% – 70,0%
      - 🟢 **Adequado:** ≥ 70,0%
-3. **Substituição de KPIs Fictícios:**
+5. **Substituição de KPIs Fictícios:**
    - Removidos cards com valores não deriváveis da base agrupada ("Escolas Avaliadas" e "Municípios Participantes").
    - Adicionados dois KPIs ancorados em dados reais: **"Descritores em Nível Crítico"** e **"UFs Analisadas (27)"**.
-4. **Filtros e Interface Visual:**
+6. **Filtros e Interface Visual:**
    - Filtro de UF ajustado para nomes por extenso (`São Paulo`, `Rio de Janeiro`) correspondentes aos microdados.
-   - Inserção da logo da **UTFPR / PPG FCET** no espaço central do menu lateral entre "Metodologia e Dados" e "Escopo da Base".
+   - Inserção da logo da **UTFPR / PPG FCET** no menu lateral.
 
 ---
 

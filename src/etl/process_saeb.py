@@ -13,8 +13,15 @@ import duckdb
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-# Diretórios de entrada e saída
-DATA_RAW_DIR = r"C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTAÇÃO\FUNDAMENTAÇÃO TEÓRICA\HABILIDADES SAEB\microdados_saeb_2023\MICRODADOS_SAEB_2023\DADOS"
+# Diretórios de entrada e saída com resolução dinâmica e suporte a múltiplos ambientes
+POSSIBLE_RAW_DIRS = [
+    r"C:\Users\Nitro5 R7\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTAÇÃO\FUNDAMENTAÇÃO TEÓRICA\HABILIDADES SAEB\microdados_saeb_2023\MICRODADOS_SAEB_2023\DADOS",
+    r"C:\Users\bruno_soares47\OneDrive\Documentos\PESSOAL\MESTRADO\DISSERTAÇÃO\FUNDAMENTAÇÃO TEÓRICA\HABILIDADES SAEB\microdados_saeb_2023\MICRODADOS_SAEB_2023\DADOS",
+    os.path.join(os.path.expanduser("~"), "OneDrive", "Documentos", "PESSOAL", "MESTRADO", "DISSERTAÇÃO", "FUNDAMENTAÇÃO TEÓRICA", "HABILIDADES SAEB", "microdados_saeb_2023", "MICRODADOS_SAEB_2023", "DADOS"),
+    os.path.join(os.path.dirname(__file__), "..", "..", "data", "raw")
+]
+
+DATA_RAW_DIR = next((p for p in POSSIBLE_RAW_DIRS if os.path.exists(p)), POSSIBLE_RAW_DIRS[0])
 DATA_OUTROS_DIR = os.path.join(DATA_RAW_DIR, "OUTROS ANOS")
 DATA_PROC_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "processed")
 
