@@ -116,7 +116,7 @@ export default function HabilidadesPage() {
       ),
     },
     {
-      title: 'Nível de Aprendizagem',
+      title: 'Faixa de Atenção Pedagógica',
       key: 'nivel',
       width: 160,
       render: (_: any, record: DescritorItem) => {

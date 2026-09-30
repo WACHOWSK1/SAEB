@@ -32,7 +32,7 @@ export const DistributionDonutChart: React.FC<DistributionDonutChartProps> = ({
   const option = {
     title: [
       {
-        text: 'Distribuição por Nível de Aprendizagem',
+        text: 'Distribuição por Faixa de Atenção Pedagógica',
         left: 'center',
         top: 10,
         textStyle: { fontSize: 13, fontWeight: 'bold', color: '#202124', fontFamily: 'Inter' },
@@ -72,7 +72,7 @@ export const DistributionDonutChart: React.FC<DistributionDonutChartProps> = ({
     },
     series: [
       {
-        name: 'Nível de Aprendizagem',
+        name: 'Faixa de Atenção Pedagógica',
         type: 'pie',
         radius: ['52%', '72%'],
         center: ['50%', '48%'],

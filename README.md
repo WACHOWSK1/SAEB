@@ -13,7 +13,7 @@ O site Next.js em `frontend/` utiliza os somatórios recalculados e auditados a 
   - **Crítico**: $< 40\%$ (11 descritores na Matriz 2001 | 16 na base completa)
   - **Atenção**: $40\% \le p < 60\%$ (30 descritores na Matriz 2001 | 36 na base completa)
   - **Intermediário**: $60\% \le p < 70\%$ (13 descritores na Matriz 2001 | 14 na base completa)
-  - **Adequado**: $\ge 70\%$ (2 descritores na Matriz 2001: D5 e D12 de LP)
+  - **Adequado**: $\ge 70\%$ (2 descritores na Matriz 2001: D5 e D18 de LP)
   - **Prioritários para intervenção pedagógica ($< 60\%$)**: **41 descritores** da Matriz 2001 (12 LP, 29 MT) e **52 habilidades** no total.
 
 Consulte os relatórios completos e evidências em [docs/auditoria_rodada_2/](docs/auditoria_rodada_2/) e [docs/RESPOSTA_E_PARECER_AUDITORIA_RODADA_2.md](docs/RESPOSTA_E_PARECER_AUDITORIA_RODADA_2.md).

@@ -1,0 +1,2 @@
+# Padronização de quebra de linha para portabilidade e integridade dos dados processados
+data/processed/*.csv text eol=lf

@@ -57,11 +57,11 @@ Se mantivéssemos o corte rígido em $50\%$ após a correção dos microdados:
   - **D1 (LP):** **62,37%** (faixa Intermediário, acima de 60%);
   - **D4 (LP):** **59,38%** (faixa Atenção, pertencente ao intervalo de 50% a 60%);
   - **D14 (LP):** **49,44%** (faixa Atenção, abaixo de 50%).
-  - *Nota:* Somente **D4** pertence ao intervalo de 50% a 60% entre esses três exemplos (ao lado de outros descritores de LP como D6 com 59,90%, D15 com 56,72%, D3 com 56,69% e D9 com 56,53%). Manter o corte em 50% descartaria sumariamente habilidades com forte demanda de intervenção pedagógica como D4 e D6.
+  - *Nota:* Somente **D4** pertence ao intervalo de 50% a 60% entre esses três exemplos (ao lado de outros descritores de LP como D6 com 59,90%, D15 com 56,72%, D3 com 56,69% e D9 com 56,53%). Manter o corte em 50% descartaria da seleção da pesquisa habilidades que, na interpretação e decisão metodológica do pesquisador para a elaboração de atividades interdisciplinares, merecem atenção formativa, como D4 e D6.
 
 ### Justificativa Pedagógica e Metodológica do Limiar 60%
 A recomendação de elevar a faixa de **Atenção** para $[40\%, 60\%[$ e o corte de prioridade para $< 60\%$ é plenamente justificada:
-1. **Consistência Curricular de Final de Ciclo:** O indicador considera respostas a itens, com ponderação. Ter menos de 60% de acerto ponderado nos itens associados a uma habilidade indica fragilidade substantiva na etapa de conclusão do Ensino Fundamental. Ressalta-se que o indicador afere respostas a itens e não mede diretamente quantos estudantes individuais dominam ou deixam de dominar a habilidade na perspectiva psicométrica de proficiência latente.
+1. **Interpretação Pedagógica e Decisão do Pesquisador:** O indicador afere respostas a itens, com ponderação, sem constituir escala ou critério psicométrico validado pelo Inep. Sob a perspectiva metodológica adotada pelo pesquisador nesta dissertação, percentuais ponderados abaixo de 60% são interpretados como indicativo de vulnerabilidade no rendimento nos itens avaliados na etapa de conclusão do Ensino Fundamental. A justificativa adotada para a dissertação ao utilizar o limite de 60% é ampliar o repertório de habilidades contempladas para subsidiar a elaboração de atividades interdisciplinares, sem conferir a esse ponto de corte o estatuto de validação psicométrica. Ressalta-se que o indicador afere respostas a itens e não mede diretamente quantos estudantes individuais dominam ou deixam de dominar a habilidade na perspectiva psicométrica de traço latente.
 2. **Abrangência Adequada para a Pesquisa:** O limiar $< 60\%$ seleciona exatamente **41 descritores na Matriz de 2001** (11 Críticos + 30 em Atenção: 12 de Língua Portuguesa e 29 de Matemática) e **52 códigos na base completa** (16 Críticos + 36 em Atenção).
 3. **Equilíbrio entre Componentes:** Preserva uma cesta robusta e representativa tanto em Língua Portuguesa quanto em Matemática, sem esvaziar o objeto de análise da dissertação.
 
@@ -72,7 +72,7 @@ A recomendação de elevar a faixa de **Atenção** para $[40\%, 60\%[$ e o cort
 | **Crítico** | $< 40,0\%$ | **11** | **16** |
 | **Atenção** | $40,0\% \le p < 60,0\%$ | **30** | **36** |
 | **Intermediário** | $60,0\% \le p < 70,0\%$ | **13** | **14** |
-| **Adequado** | $\ge 70,0\%$ | **2** (D5 e D12 de LP) | **2** |
+| **Adequado** | $\ge 70,0\%$ | **2** (D5 e D18 de LP) | **2** |
 | **TOTAL PRIORITÁRIO** | **$< 60,0\%$ (Crítico + Atenção)** | **41** | **52** |
 
 ---

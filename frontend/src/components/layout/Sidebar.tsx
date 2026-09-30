@@ -116,7 +116,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
           <div className="p-4 m-3 rounded-lg bg-[#2A2B2E] border border-[#3A3B3E] text-xs text-gray-300 space-y-1 mb-6">
             <p className="font-bold text-[#FFCC00] m-0">Escopo da Base</p>
             <p className="m-0 text-[11px] text-gray-400">Microdados SAEB 2023</p>
-            <p className="m-0 text-[10px] text-gray-500">Multissérie e Diagnóstico por Habilidade</p>
+            <p className="m-0 text-[10px] text-gray-500">9º Ano EF • Diagnóstico por Habilidade</p>
           </div>
         )}
       </div>

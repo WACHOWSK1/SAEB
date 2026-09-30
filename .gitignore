@@ -33,6 +33,7 @@ ENV/
 .idea/
 *.swp
 *.swo
+.git-*/
 
 # Temporary audit scripts
 frontend/audit_data.py

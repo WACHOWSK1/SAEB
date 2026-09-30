@@ -206,7 +206,7 @@ def run_etl():
     out_csv = os.path.join(DATA_PROC_DIR, "saeb_descritores.csv")
     
     df_final.to_parquet(out_parquet, index=False)
-    df_final.to_csv(out_csv, index=False, sep=';', encoding='utf-8-sig', float_format='%.15g')
+    df_final.to_csv(out_csv, index=False, sep=';', encoding='utf-8-sig', float_format='%.15g', lineterminator='\n')
     
     print(f"\nETL de Alta Performance Finalizado com sucesso em {time.time()-t_start:.2f}s!", flush=True)
     print(f"Total de registros agregados gerados: {len(df_final)}", flush=True)
